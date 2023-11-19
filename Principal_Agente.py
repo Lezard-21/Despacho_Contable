@@ -2,49 +2,74 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Button, PhotoImage, Toplevel
 from PIL import Image, ImageTk
 
-class Principal_Agente:
+class PrincipalAgente:
     def __init__(self, master):
         self.master = master
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        
 
     def boton_Registrar_Cliente(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Cliente import RegistrarCliente
+        RegistrarCliente(root)
         print("boton_Registrar_Cliente")
 
     def boton_Ver_Cliente(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Ver_Clientes import VerClientes
+        VerClientes(root)
         print("boton_Ver_Cliente")
 
 
     def boton_Registrar_Emprendedor(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Emprendedor import RegistrarEmprendedor
+        RegistrarEmprendedor(root)
         print("boton_Registrar_Emprendedor")
 
 
     def boton_Ver_Emprendedores(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Ver_Emprendedores import VerEmprendedores
+        VerEmprendedores(root)
         print("boton_Ver_Emprendedores")
 
 
     def boton_cambiar_Cliente_A_Emprendedor(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Cliente import RegistrarCliente
+        RegistrarCliente(root)
         print("boton_cambiar_Cliente_A_Emprendedor")
 
 
     def boton_Hacer_Atenciones(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Atenciones import RegistrarAtenciones
+        RegistrarAtenciones(root)
         print("boton_Hacer_Atenciones")
 
 
     def boton_cambiar_informacion(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Informacion import ModificarInformacion 
+        ModificarInformacion(root)
         print("boton_Cambiar_informacion")
 
 
     def boton_Cerrar_Sesion(self):
-        # logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Inicio_Sesion import IniciarSesion
+        IniciarSesion(root)
         print("boton_Cerrar_Sesion")
 
 
@@ -219,6 +244,9 @@ class Principal_Agente:
                 width=350.0,
                 height=100.0
             )
+            self.master.geometry("741x604")
+            self.master.configure(bg="#FFFFFF")
+            self.master.resizable(False,False)    
 
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame5"
@@ -226,10 +254,6 @@ class Principal_Agente:
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("771x604")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False,False)
     # Crea una instancia de IniciarSesion
-    app = Principal_Agente(window)
-
+    app = PrincipalAgente(window)
     window.mainloop()

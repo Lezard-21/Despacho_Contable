@@ -14,27 +14,45 @@ class Principal_Admin:
         self.crear_interfaz()
 
     def boton_Ver_Agentes(self):
-        #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Ver_Agentes import VerAgentes
+        VerAgentes(root)
         print("boton_Ver_Agente")
 
-    def  boton_Agregar_Agente(self):
-        #logica del boton
+    def  boton_Registrar_Agente(self):
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Agente import RegistrarAgente
+        RegistrarAgente(root)
         print("boton_agregar_Agente")
 
     def boton_Ver_Regimen(self):
-        #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Ver_Regimenes import VerRegimenes
+        VerRegimenes(root)
         print("boton_ver_Regimen")
 
-    def boton_Agregar_Regimen(self):
-        #logica del boton
+    def boton_Registrar_Regimen(self):
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Regimen import RegistrarRegimen
+        RegistrarRegimen(root)
         print("boton_Agregar_Regimen")
 
     def boton_cambiar_informacion(self):
-        #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Modificar_Agente import ModificarAgente
+        ModificarAgente(root)
         print("boton_Cambiar_informacion")
 
     def boton_Cerrar_Sesion(self):
-        #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Inicio_Sesion import IniciarSesion
+        IniciarSesion(root)
         print("boton_Cerrar_Sesion")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -88,7 +106,7 @@ class Principal_Admin:
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=self.boton_Agregar_Agente,
+            command=self.boton_Registrar_Agente,
             relief="flat"
         )
         self.button_1.place(
@@ -154,7 +172,7 @@ class Principal_Admin:
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
-            command=self.boton_Agregar_Regimen,
+            command=self.boton_Registrar_Regimen,
             relief="flat"
         )
         self.button_5.place(
@@ -188,15 +206,16 @@ class Principal_Admin:
             image=self.image_image_2
         )
 
+        self.master.geometry("740x585")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame6"
         return assets_path / path
     
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("740x585")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False,False)
     # Crea una instancia de IniciarSesion
     app = Principal_Admin(window)
 

@@ -10,11 +10,17 @@ class ModificarInformacion:
         self.crear_interfaz()
 
     def boton_Informacion_Cliente(self):
-        # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Modificar_Cliente import ModificarCliente
+        ModificarCliente(root)
         print("boton_Informacion_Cliente")
 
     def boton_Informacion_Emprendedor(self):
-        # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Modificar_Emprendedor import ModificarEmprendedor
+        ModificarEmprendedor(root)
         print("boton_Informacion_Emprendedor")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -120,6 +126,10 @@ class ModificarInformacion:
             112.0,
             image=self.image_image_5
         )
+
+        self.master.geometry("782x587")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
 
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame4"

@@ -1,4 +1,4 @@
-from tkinter import Entry, Tk, Canvas, Button, PhotoImage
+from tkinter import Entry, Tk, Canvas, Button, PhotoImage, Toplevel
 from PIL import Image, ImageTk
 from pathlib import Path
 
@@ -11,12 +11,16 @@ class IniciarSesion:
         self.crear_interfaz()
 
     def boton_Iniciar_Sesion(self):
-        # lógica del botón
-        print("boton_Iniciar_Sesion")
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
 
     def boton_Iniciar_Sesion_Administrador(self):
-        # lógica del botón
-        print("boton_Iniciar_Sesion_Administrador")
+        self.master.destroy()
+        root = Tk()
+        from Inicio_Sesion_Admin import IniciarSesionAdmin
+        IniciarSesionAdmin(root)
 
     def boton_Ver_Contraseña(self):
         # lógica del botón
@@ -87,7 +91,7 @@ class IniciarSesion:
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=self.boton_Iniciar_Sesion_Administrador,
+            command=self.boton_Iniciar_Sesion,
             relief="flat"
         )
         self.button_2.place(
@@ -180,6 +184,10 @@ class IniciarSesion:
             image=self.image_image_2
         )
 
+        self.master.geometry("771x604")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame7"
         return assets_path / path
@@ -187,8 +195,5 @@ class IniciarSesion:
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("771x604")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False,False)
     app = IniciarSesion(window)
     window.mainloop()

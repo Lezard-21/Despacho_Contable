@@ -11,12 +11,23 @@ class ModificarAgente:
 
     def boton_Modificar_Agente(self):
         # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Principal_Admin import Principal_Admin
+        Principal_Admin(root)
         print("boton_Modificar_Agente")
 
     def boton_Cargar_Agente(self):
         # lógica del botón
         print("boton_Cargar_Agente")
 
+    def  boton_Atras(self):
+        self.master.destroy()
+        root = Tk()
+        from Principal_Admin import Principal_Admin
+        Principal_Admin(root)
+        print("atras")
+        
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
         if 'alpha' in kwargs:
             alpha = int(kwargs.pop('alpha') * 255)
@@ -78,6 +89,22 @@ class ModificarAgente:
         )
         self.button_1.place(
             x=527.0,
+            y=658.0,
+            width=190.0,
+            height=51.0
+        )
+
+        self.button_image_atras = PhotoImage(
+            file=self.relative_to_assets("button_atras.png"))
+        self.button_atras = Button(
+            image=self.button_image_atras,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.boton_Atras,
+            relief="flat"
+        )
+        self.button_atras.place(
+            x=0,
             y=658.0,
             width=190.0,
             height=51.0
@@ -305,15 +332,16 @@ class ModificarAgente:
             font=("WorkSansRoman Bold", 20 * -1)
         )
 
+        self.master.geometry("717x709")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame11"
         return assets_path / path
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("717x709")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False, False)
     # Crea una instancia de ModificarAgente
     app = ModificarAgente(window)
 

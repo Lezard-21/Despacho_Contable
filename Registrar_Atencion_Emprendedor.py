@@ -16,7 +16,18 @@ class RegistrarAtencionEmprendedor:
             
     def  boton_Registrar_Atencion_Emprendedor(self):
         #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
         print("boton_Registrar_Atencion_Emprendedor")
+
+    def  boton_Atras(self):
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
+        print("atras")
 
     images = []  # Para mantener la imagen creada
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -203,6 +214,22 @@ class RegistrarAtencionEmprendedor:
             height=52.0
         )
 
+        self.button_image_atras = PhotoImage(
+            file=self.relative_to_assets("button_atras.png"))
+        self.button_atras = Button(
+            image=self.button_image_atras,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.boton_Atras,
+            relief="flat"
+        )
+        self.button_atras.place(
+            x=0,
+            y=536.0,
+            width=190.0,
+            height=51.0
+        )
+
         self.canvas.create_text(
             92.0,
             31.0,
@@ -323,6 +350,9 @@ class RegistrarAtencionEmprendedor:
             font=("Inter", 16 * -1)
         )
 
+        self.master.geometry("695x588")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
 
     def relative_to_assets(self, path: str) -> Path:
                 assets_path = Path(__file__).parent / "assets" / "frame17"
@@ -330,8 +360,5 @@ class RegistrarAtencionEmprendedor:
     
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("695x588")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False,False)
     app = RegistrarAtencionEmprendedor(window)
     window.mainloop()

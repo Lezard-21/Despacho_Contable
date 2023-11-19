@@ -3,7 +3,7 @@ from PIL import Image, ImageTk
 from pathlib import Path
 
 
-class IniciarSesion:
+class IniciarSesionAdmin:
     def __init__(self, master):
         self.master = master
         self.images = []
@@ -11,12 +11,11 @@ class IniciarSesion:
         self.crear_interfaz()
 
     def boton_Iniciar_Sesion(self):
-        # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Principal_Admin import Principal_Admin
+        Principal_Admin(root)
         print("boton_Iniciar_Sesion")
-
-    def boton_Iniciar_Sesion_Administrador(self):
-        # lógica del botón
-        print("boton_Iniciar_Sesion_Administrador")
 
     def boton_Ver_Contraseña(self):
         # lógica del botón
@@ -60,33 +59,16 @@ class IniciarSesion:
             0.0,
             771.0,
             604.0,
-            fill="#00796B",
+            fill="#446575",
             alpha=.8)
 
-        self.button_image_1 = PhotoImage(file=self.relative_to_assets("button_1.png"))
-        self.button_1 = Button(
-            image=self.button_image_1,
-            borderwidth=0,
-            highlightthickness=0,
-            command=self.boton_Iniciar_Sesion_Administrador,
-            relief="flat"
-        )
-        self.button_1.image = self.button_image_1
-
-        self.button_1.place(
-            x=397.0,
-            y=569.0,
-            width=292.0,
-            height=35.0
-        )
-
         self.button_image_2 = PhotoImage(
-            file=self.relative_to_assets("button_2.png"))
+            file=self.relative_to_assets("button_1.png"))
         self.button_2 = Button(
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=self.boton_Iniciar_Sesion_Administrador,
+            command=self.boton_Iniciar_Sesion,
             relief="flat"
         )
         self.button_2.place(
@@ -137,7 +119,7 @@ class IniciarSesion:
             height=39.0
         )
 
-        self.button_image_3 = PhotoImage(file=self.relative_to_assets("button_3.png"))
+        self.button_image_3 = PhotoImage(file=self.relative_to_assets("button_2.png"))
         self.button_3 = Button(
             image=self.button_image_3,
             borderwidth=0,
@@ -179,17 +161,17 @@ class IniciarSesion:
             image=self.image_image_2
         )
 
+        self.master.geometry("771x604")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
-        assets_path = Path(__file__).parent / "assets" / "frame7"
+        assets_path = Path(__file__).parent / "assets" / "frame8"
         return assets_path / path
 
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("771x604")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False, False)
     # Crea una instancia de IniciarSesion
-    app = IniciarSesion(window)
-
+    app = IniciarSesionAdmin(window)
     window.mainloop()

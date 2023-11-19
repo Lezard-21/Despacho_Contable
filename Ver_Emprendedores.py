@@ -21,7 +21,10 @@ class VerEmprendedores:
         self.crear_interfaz()
             
     def boton_Atras(self):
-        #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
         print("button_Atras")
 
     def boton_CargarEmprendedores(self):
@@ -159,14 +162,16 @@ class VerEmprendedores:
             105.0,
             image=self.image_image_3
         )
+
+        self.master.geometry("782x587")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame2"
         return assets_path / path
     
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("782x587")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False,False)
     app = VerEmprendedores(window)
     window.mainloop()   

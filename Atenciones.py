@@ -10,11 +10,17 @@ class RegistrarAtenciones:
         self.crear_interfaz()
 
     def boton_Atencion_Cliente(self):
-        # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Atencion_Cliente import RegistrarAtencionAgente
+        RegistrarAtencionAgente(root)
         print("boton_Atencion_Cliente")
 
     def boton_Atencion_Emprendedor(self):
-        # lógica del botón
+        self.master.destroy()
+        root = Tk()
+        from Registrar_Atencion_Emprendedor import RegistrarAtencionEmprendedor
+        RegistrarAtencionEmprendedor(root)
         print("boton_Atencion_Emprendedor")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -121,15 +127,16 @@ class RegistrarAtenciones:
             image=self.image_image_5
         )
 
+        self.master.geometry("782x587")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame3"
         return assets_path / path
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("782x587")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False, False)
     # Crea una instancia de RegistrarAtenciones
     app = RegistrarAtenciones(window)
 

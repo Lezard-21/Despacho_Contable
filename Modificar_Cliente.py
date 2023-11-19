@@ -14,11 +14,22 @@ class ModificarCliente:
 
     def  boton_Modificar_Cliente(self):
         #logica del boton
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
         print("boton_Modificar_Cliente")
 
     def  boton_Cargar_Cliente(self):
         #logica del boton
         print("boton_Cargar_Cliente")
+
+    def  boton_Atras(self):
+        self.master.destroy()
+        root = Tk()
+        from Principal_Agente import PrincipalAgente
+        PrincipalAgente(root)
+        print("atras")
 
     images = []  # Para mantener la imagen creada
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -123,6 +134,22 @@ class ModificarCliente:
             y=139.0,
             width=190.0,
             height=30.0
+        )
+
+        self.button_image_atras = PhotoImage(
+            file=self.relative_to_assets("button_atras.png"))
+        self.button_atras = Button(
+            image=self.button_image_atras,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.boton_Atras,
+            relief="flat"
+        )
+        self.button_atras.place(
+            x=0,
+            y=666.0,
+            width=190.0,
+            height=51.0
         )
 
         self.entry_image_1 = PhotoImage(file=self.relative_to_assets("entry_1.png"))
@@ -509,14 +536,16 @@ class ModificarCliente:
             fill="#FFFFFF",
             font=("WorkSansRoman Regular", 16 * -1)
         )
+
+        self.master.geometry("695x717")
+        self.master.configure(bg="#FFFFFF")
+        self.master.resizable(False,False)
+
     def relative_to_assets(self, path: str) -> Path:
         assets_path = Path(__file__).parent / "assets" / "frame13"
         return assets_path / path
 
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("695x717")
-    window.configure(bg="#FFFFFF")
-    window.resizable(False, False)
     app = ModificarCliente(window)
     window.mainloop()
