@@ -27,33 +27,32 @@ class VerRegimenes:
         #logica del boton
 
         try: 
-            connection = mysql.connector.connect(host='localhost',
-                                                 user='root',
-                                                 database='lion',
-                                                 password='julianms3')
+            conexion = mysql.connector.connect(host='localhost',
+                                               user='root',
+                                               database='lion',
+                                               password='julianms3')
 
             sql_select_Query = "SELECT * from regimen"
-            cursor=connection.cursor()
+            cursor=conexion.cursor()
             cursor.execute(sql_select_Query)
 
             records = cursor.fetchall()
 
-            self.regimenes_text.delete(1.0, END)
+            self.entry_1.delete(1.0, END)
             query = ""
 
             for row in records:
                 row2 = str("idRegimen = " + str(row[0]) +
-                           "\n" + "Regimen = " + str(row[1]) + "\n""\n""\n") 
+                           "\n" + "Regimen = " + str(row[1]) + "\n") 
                          
                 query += row2
-            self.regimenes_text.insert(END, query)
+            self.entry_1.insert(END, query)
 
         except mysql.connector.Error as e:
             messagebox.showerror("Error", "Error reading data from MySQL table.")
-            # print("Error reading data from MySQL table", e)
         finally:
             if connection.is_connected():
-                connection.close()
+                conexion.close()
                 cursor.close()
 
         print("boton_Cargar_Regimen")
