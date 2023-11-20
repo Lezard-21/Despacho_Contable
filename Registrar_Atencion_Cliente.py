@@ -5,6 +5,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 from PIL import Image, ImageTk
+import mysql.connector
 
 class RegistrarAtencionAgente:
 
@@ -20,6 +21,46 @@ class RegistrarAtencionAgente:
         root = Tk()
         from Principal_Agente import PrincipalAgente
         PrincipalAgente(root)
+
+        try:
+            conexion = mysql.connector.connect(
+                host='localhost',
+                user='root',
+                database='lion',
+                password='julianms3'
+            )
+
+            cursor = conexion.cursor()
+
+            mysql_insert_query = "INSERT INTO atenciones (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Obervaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            idCliente = self.entry_1.get()
+            NombreCliente = self.entry_2.get()
+            Telefono = self.entry_3.get()
+            Correo = self.entry_4.get()
+            Fecha = self.entry_5.get()
+            RFC = self.entry_6.get()
+            Observaciones = self.entry_7.get()
+
+            cursor.execute(mysql_insert_query, (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Observaciones))
+           # record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
+           # print(record)
+          #  cursor.exexute(mysql_insert_query, record)
+            #id_Atencion = self.id.get("text")
+            #Fecha = self.fecha.get()
+            #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
+
+            conexion.commit()
+            print("Record inserted successfully into agentes table")
+
+        except mysql.connector.Error as error:
+            print("Failed to insert into MySQL table {}".format(error))
+        finally:
+            if conexion.is_connected:
+                cursor.close()
+                conexion.close()
+
+        messagebox.showinfo("Registro", "Registro de atencion al cliente, registrado")
+
         print("boton_Registrar_Atencion_Cliente")
 
     def  boton_Atras(self):

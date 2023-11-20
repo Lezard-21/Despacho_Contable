@@ -4,6 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
+import mysql.connector
 
 
 class RegistrarAtencionEmprendedor:
@@ -20,6 +21,43 @@ class RegistrarAtencionEmprendedor:
         root = Tk()
         from Principal_Agente import PrincipalAgente
         PrincipalAgente(root)
+
+        try:
+            conexion = mysql.connector.connect(
+                host='localhost',
+                user='root',
+                database='lion',
+                password='julianms3'
+            )
+
+            cursor = conexion.cursor()
+
+            mysql_insert_query = "INSERT INTO atencionesemprendedores (NombreCliente, Telefono, Correo, RFC, Fecha, Observaciones) VALUES (%s, %s, %s, %s, %s, %s)"
+            nombreCliente = self.entry_1.get()
+            Telefono = self.entry_2.get()
+            Correo = self.entry_3.get()
+            rfc = self.entry_4.get()
+            Fecha = self.entry_5.get()
+            Observaciones = self.entry_6.get() 
+          #  record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
+          #  print(record)
+            cusor.exexute(mysql_insert_query, (nombreCliete, Telefono, Correo, rfc, Fecha, Observaciones))
+            #id_Atencion = self.id.get("text")
+            #Fecha = self.fecha.get()
+            #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
+
+            conexion.commit()
+            print("Record inserted successfully into agentes table")
+
+        except mysql.connector.Error as error:
+            print("Failed to insert into MySQL table {}".format(error))
+        finally:
+            if conexion.is_connected:
+                cursor.close()
+                conexion.close()
+
+        messagebox.showinfo("Registro","registro de atencion al emprendedor, registrado")
+
         print("boton_Registrar_Atencion_Emprendedor")
 
     def  boton_Atras(self):

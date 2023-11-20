@@ -4,6 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
+import mysql.connector
 
 
 class RegistrarRegimen:
@@ -19,6 +20,33 @@ class RegistrarRegimen:
         root = Tk()
         from Principal_Admin import Principal_Admin
         Principal_Admin(root)
+
+        try:
+            conexion = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password='julianms3',
+            database='lion'
+            )
+
+            cursor = conexion.cursor()
+
+            consulta = "INSERT INTO regimen (idRegimen, Regimen) VALUES (%s, %s)"
+            id_regimen = self.entry_1.get()
+            regimen = self.entry_2.get()
+
+            cursor.execute(consulta, (id_regimen, regimen))
+
+            conexion.commit()
+
+        except mysql.connector.Error as e:
+            messagebox.showerror("Error", "Error reading data from MySQL table.")
+        finally:
+            if connection.is_connected():
+                cursor.close()
+                conexion.close()
+
+        messagebox.showinfo(message="El Régimen fue agregado exitosamente", title="Régimen")
         print("boton_Registrar_Regimen")
 
     def  boton_Atras(self):

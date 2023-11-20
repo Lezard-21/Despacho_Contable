@@ -4,6 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
+import mysql.connector
 
 
 
@@ -24,6 +25,37 @@ class VerRegimenes:
 
     def  boton_Cargar_Regimen(self):
         #logica del boton
+
+        try: 
+            connection = mysql.connector.connect(host='localhost',
+                                                 user='root',
+                                                 database='lion',
+                                                 password='julianms3')
+
+            sql_select_Query = "SELECT * from regimen"
+            cursor=connection.cursor()
+            cursor.execute(sql_select_Query)
+
+            records = cursor.fetchall()
+
+            self.regimenes_text.delete(1.0, END)
+            query = ""
+
+            for row in records:
+                row2 = str("idRegimen = " + str(row[0]) +
+                           "\n" + "Regimen = " + str(row[1]) + "\n""\n""\n") 
+                         
+                query += row2
+            self.regimenes_text.insert(END, query)
+
+        except mysql.connector.Error as e:
+            messagebox.showerror("Error", "Error reading data from MySQL table.")
+            # print("Error reading data from MySQL table", e)
+        finally:
+            if connection.is_connected():
+                connection.close()
+                cursor.close()
+
         print("boton_Cargar_Regimen")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
