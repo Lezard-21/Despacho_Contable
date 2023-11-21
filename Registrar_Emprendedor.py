@@ -4,6 +4,8 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import IntVar, Radiobutton, Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
+import mysql.connector
+import random
 
 class RegistrarEmprendedor:
 
@@ -15,6 +17,37 @@ class RegistrarEmprendedor:
         
     def  boton_Registrar_Emprendedor(self):
         #logica del boton
+
+     #   idemprendedor = random.randint(1,99)
+
+        try:
+            conexion.mysql.connnector.connect(host='localhost',
+                                              user="root",
+                                              database='lion',
+                                              password='julianms3'
+            )
+
+            cursor.conexion.cursor()
+
+            consulta = "INSERT INTO emprendedores (NombreCompleto, NombreProyecto, Telefono, Correo, RFC, NSS, CP, CapitalInicial, Observaciones) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            NombreCompleto = self.entry_1.get()
+            NombreProyecto = self.entry_2.get()
+            Telefono = self.entry_3.get()
+            Correo = self.entry_4.get()
+            RFC = self.entry_5.get()
+            NSS = self.entry_6.get()
+            CP = self.entry_7.get()
+            CapitalInicial = self.entry_8.get()
+
+            cursor.execute(consulta, (NombreCompleto, NombreProyecto, Telefono, Correo, RFC, NSS, CP, CapitalInicial))
+            conexion.commit()
+        except mysql.connector.Error as e:
+            print("Failed to insert into MySQL table {}".format(error))
+        finally:
+            if connection.is_connected:
+                cursor.close()
+                conexion.close()
+                
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
