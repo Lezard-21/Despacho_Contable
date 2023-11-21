@@ -2,7 +2,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage
 
 from PIL import Image, ImageTk
 class ModificarEmprendedor:
@@ -405,33 +405,68 @@ class ModificarEmprendedor:
             font=("Inter", 16 * -1)
         )
 
-        self.canvas.create_rectangle(
-            106.0,
-            487.0,
-            137.0,
-            513.0,
-            fill="#D9D9D9",
-            outline=""
+        # self.canvas.create_rectangle(
+        #     106.0,
+        #     487.0,
+        #     137.0,
+        #     513.0,
+        #     fill="#D9D9D9",
+        #     outline=""
+        # )
+
+        # self.canvas.create_rectangle(
+        #     106.0,
+        #     536.0,
+        #     137.0,
+        #     562.0,
+        #     fill="#D9D9D9",
+        #     outline=""
+        # )
+
+        # self.canvas.create_rectangle(
+        #     107.0,
+        #     585.0,
+        #     138.0,
+        #     611.0,
+        #     fill="#D9D9D9",
+        #     outline=""
+        # )
+
+        # Crea una variable para almacenar el valor seleccionado
+        self.selected_value = IntVar()
+
+        self.radio1 = Radiobutton(
+           self.master,
+           value=1,
+           variable=self.selected_value,
+           indicatoron=0,
+           activebackground='green',
+           selectcolor='black'
+        )
+        
+        self.radio2 = Radiobutton(
+           self.master,
+           value=2,
+           variable=self.selected_value,
+           indicatoron=0,
+           activebackground='green',
+           selectcolor='black'
         )
 
-        self.canvas.create_rectangle(
-            106.0,
-            536.0,
-            137.0,
-            562.0,
-            fill="#D9D9D9",
-            outline=""
+        self.radio3 = Radiobutton(
+           self.master,
+           value=3,
+           variable=self.selected_value,
+           indicatoron=0,
+           activebackground='green',
+           selectcolor='black'
         )
+        # Place radio buttons
+        self.radio1.place(x=106, y=487, width=30.0, height=30.0)
+        self.radio2.place(x=106, y=536, width=30.0, height=30.0)
+        self.radio3.place(x=107, y=585, width=30.0, height=30.0)
 
-        self.canvas.create_rectangle(
-            107.0,
-            585.0,
-            138.0,
-            611.0,
-            fill="#D9D9D9",
-            outline=""
-        )
-
+        ############
         self.canvas.create_rectangle(
             98.0,
             389.0,
