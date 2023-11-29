@@ -2,9 +2,10 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
-import mysql.connector
+import operaciones_json
+# import mysql.connector
 
 
 
@@ -25,35 +26,36 @@ class VerRegimenes:
 
     def  boton_Cargar_Regimen(self):
         #logica del boton
+        VerRegimenes= operaciones_json.read_json("RegimenFiscal.json")
+        self.entry_1.insert(INSERT,VerRegimenes)
+        # try: 
+        #     conexion = mysql.connector.connect(host='localhost',
+        #                                        user='root',
+        #                                        database='lion',
+        #                                        password='julianms3')
 
-        try: 
-            conexion = mysql.connector.connect(host='localhost',
-                                               user='root',
-                                               database='lion',
-                                               password='julianms3')
+        #     sql_select_Query = "SELECT * from regimen"
+        #     cursor=conexion.cursor()
+        #     cursor.execute(sql_select_Query)
 
-            sql_select_Query = "SELECT * from regimen"
-            cursor=conexion.cursor()
-            cursor.execute(sql_select_Query)
+        #     records = cursor.fetchall()
 
-            records = cursor.fetchall()
+        #     self.entry_1.delete(1.0, END)
+        #     query = ""
 
-            self.entry_1.delete(1.0, END)
-            query = ""
-
-            for row in records:
-                row2 = str("idRegimen = " + str(row[0]) +
-                           "\n" + "Regimen = " + str(row[1]) + "\n") 
+        #     for row in records:
+        #         row2 = str("idRegimen = " + str(row[0]) +
+        #                    "\n" + "Regimen = " + str(row[1]) + "\n") 
                          
-                query += row2
-            self.entry_1.insert(END, query)
+        #         query += row2
+        #     self.entry_1.insert(END, query)
 
-        except mysql.connector.Error as e:
-            messagebox.showerror("Error", "Error reading data from MySQL table.")
-        finally:
-            if connection.is_connected():
-                conexion.close()
-                cursor.close()
+        # except mysql.connector.Error as e:
+        #     messagebox.showerror("Error", "Error reading data from MySQL table.")
+        # finally:
+        #     if connection.is_connected():
+        #         conexion.close()
+        #         cursor.close()
 
         print("boton_Cargar_Regimen")
 

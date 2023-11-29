@@ -7,8 +7,8 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage
+import operaciones_json
 
 from PIL import Image, ImageTk
 
@@ -29,6 +29,8 @@ class VerEmprendedores:
 
     def boton_CargarEmprendedores(self):
         #logica del boton
+        Emprendedor= operaciones_json.read_json("Emprendedor.json")
+        self.entry_1.insert(INSERT,Emprendedor)
         print("button_Cargar_Emprendedores")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):

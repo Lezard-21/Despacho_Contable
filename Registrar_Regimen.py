@@ -2,9 +2,10 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
-import mysql.connector
+# import mysql.connector
+import operaciones_json
 
 
 class RegistrarRegimen:
@@ -16,37 +17,44 @@ class RegistrarRegimen:
         self.crear_interfaz()
 
     def  boton_Registrar_Regimen(self):
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        print("1: "+texto_1)
+        print("2: "+texto_2)
+        operaciones_json.add_to_json('RegimenFiscal.json', 'Id regimen', texto_1)
+        operaciones_json.add_to_json('RegimenFiscal.json', 'Regimen', texto_2)
+        messagebox.showinfo("Confirmation", "Regimen agregado")
         self.master.destroy()
         root = Tk()
         from Principal_Admin import Principal_Admin
         Principal_Admin(root)
 
-        try:
-            conexion = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            password='julianms3',
-            database='lion'
-            )
+        # try:
+        #     conexion = mysql.connector.connect(
+        #     host='localhost',
+        #     user='root',
+        #     password='julianms3',
+        #     database='lion'
+        #     )
 
-            cursor = conexion.cursor()
+        #     cursor = conexion.cursor()
 
-            consulta = "INSERT INTO regimen (idRegimen, Regimen) VALUES (%s, %s)"
-            id_regimen = self.entry_1.get()
-            regimen = self.entry_2.get()
+        #     consulta = "INSERT INTO regimen (idRegimen, Regimen) VALUES (%s, %s)"
+        #     id_regimen = self.entry_1.get()
+        #     regimen = self.entry_2.get()
 
-            cursor.execute(consulta, (id_regimen, regimen))
+        #     cursor.execute(consulta, (id_regimen, regimen))
 
-            conexion.commit()
+        #     conexion.commit()
 
-        except mysql.connector.Error as e:
-            messagebox.showerror("Error", "Error reading data from MySQL table.")
-        finally:
-            if connection.is_connected():
-                cursor.close()
-                conexion.close()
+        # except mysql.connector.Error as e:
+        #     messagebox.showerror("Error", "Error reading data from MySQL table.")
+        # finally:
+        #     if connection.is_connected():
+        #         cursor.close()
+        #         conexion.close()
 
-        messagebox.showinfo(message="El Régimen fue agregado exitosamente", title="Régimen")
+        # messagebox.showinfo(message="El Régimen fue agregado exitosamente", title="Régimen")
         print("boton_Registrar_Regimen")
 
     def  boton_Atras(self):

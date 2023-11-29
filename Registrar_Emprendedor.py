@@ -2,10 +2,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import IntVar, Radiobutton, Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
-import mysql.connector
-import random
+import operaciones_json
 
 class RegistrarEmprendedor:
 
@@ -17,37 +16,28 @@ class RegistrarEmprendedor:
         
     def  boton_Registrar_Emprendedor(self):
         #logica del boton
-
-     #   idemprendedor = random.randint(1,99)
-
-        try:
-            conexion.mysql.connnector.connect(host='localhost',
-                                              user="root",
-                                              database='lion',
-                                              password='julianms3'
-            )
-
-            cursor.conexion.cursor()
-
-            consulta = "INSERT INTO emprendedores (NombreCompleto, NombreProyecto, Telefono, Correo, RFC, NSS, CP, CapitalInicial, Observaciones) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            NombreCompleto = self.entry_1.get()
-            NombreProyecto = self.entry_2.get()
-            Telefono = self.entry_3.get()
-            Correo = self.entry_4.get()
-            RFC = self.entry_5.get()
-            NSS = self.entry_6.get()
-            CP = self.entry_7.get()
-            CapitalInicial = self.entry_8.get()
-
-            cursor.execute(consulta, (NombreCompleto, NombreProyecto, Telefono, Correo, RFC, NSS, CP, CapitalInicial))
-            conexion.commit()
-        except mysql.connector.Error as e:
-            print("Failed to insert into MySQL table {}".format(error))
-        finally:
-            if connection.is_connected:
-                cursor.close()
-                conexion.close()
-                
+        texto_1 = self.entry_1.get("1.0", 'end-1c')
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get()
+        texto_4 = self.selected_value.get()
+        texto_7 = self.entry_7.get()
+        texto_8 = self.entry_8.get()
+        texto_9 = self.entry_9.get()
+        texto_10 = self.entry_10.get()
+        operaciones_json.add_to_json('Emprendedor.json', 'Nombre', texto_6)
+        operaciones_json.add_to_json('Emprendedor.json', 'Nombre de negocio', texto_5)
+        operaciones_json.add_to_json('Emprendedor.json', 'Telefono', texto_2)
+        operaciones_json.add_to_json('Emprendedor.json', 'Correo electronico', texto_3)
+        operaciones_json.add_to_json('Emprendedor.json', 'RFC', texto_10)
+        operaciones_json.add_to_json('Emprendedor.json', 'NSS', texto_7)
+        operaciones_json.add_to_json('Emprendedor.json', 'Codigo postal', texto_8)
+        operaciones_json.add_to_json('Emprendedor.json', 'Tipo de persona', texto_4)
+        operaciones_json.add_to_json('Emprendedor.json', 'Capital inicial', texto_9)
+        operaciones_json.add_to_json('Emprendedor.json', 'Observaciones', texto_1)
+        messagebox.showinfo("Confirmation", "Emprendedor agregado")
+        
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
@@ -149,7 +139,7 @@ class RegistrarEmprendedor:
 
         self.canvas.create_rectangle(
             92.0,
-            528.0,
+            440.0,
             333.0,
             681.0,
             fill="#073131",
@@ -165,7 +155,7 @@ class RegistrarEmprendedor:
 
         self.canvas.create_text(
             147.0,
-            641.0,
+            600.0,
             anchor="nw",
             text="Equipo de Trabajo",
             fill="#FFFFFF",
@@ -174,7 +164,7 @@ class RegistrarEmprendedor:
 
         self.canvas.create_text(
             147.0,
-            595.0,
+            550.0,
             anchor="nw",
             text="Marketing",
             fill="#FFFFFF",
@@ -183,7 +173,7 @@ class RegistrarEmprendedor:
 
         self.canvas.create_text(
             147.0,
-            543.0,
+            500.0,
             anchor="nw",
             text="Productor\n",
             fill="#FFFFFF",
@@ -259,11 +249,11 @@ class RegistrarEmprendedor:
         #     667.0,
         #     fill="#D9D9D9",
         #     outline="")
-        self.selected_value = IntVar()
+        self.selected_value = StringVar()
 
         self.radio1 = Radiobutton(
            self.master,
-           value=1,
+           value="Productor",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
@@ -272,7 +262,7 @@ class RegistrarEmprendedor:
         
         self.radio2 = Radiobutton(
            self.master,
-           value=2,
+           value="Marketing",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
@@ -281,16 +271,16 @@ class RegistrarEmprendedor:
 
         self.radio3 = Radiobutton(
            self.master,
-           value=3,
+           value="Equipo de trabajo",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
            selectcolor='black'
         )
         # Place radio buttons
-        self.radio1.place(x=101, y=546, width=30.0, height=30.0)
-        self.radio2.place(x=101, y=594, width=30.0, height=30.0)
-        self.radio3.place(x=101, y=641, width=30.0, height=30.0)
+        self.radio1.place(x=101, y=500, width=30.0, height=30.0)
+        self.radio2.place(x=101, y=550, width=30.0, height=30.0)
+        self.radio3.place(x=101, y=600, width=30.0, height=30.0)
 
         ############
         self.canvas.create_rectangle(
@@ -391,26 +381,26 @@ class RegistrarEmprendedor:
             fill="#073131",
             outline="")
 
-        self.entry_image_4 = PhotoImage(
-            file=self.relative_to_assets("entry_4.png"))
-        self.entry_bg_4 = self.canvas.create_image(
-            213.0,
-            488.0,
-            image=self.entry_image_4
-        )
-        self.entry_4 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_4.place(
-            x=103.0,
-            y=473.0,
-            width=220.0,
-            height=28.0
-        )
-
+        # self.entry_image_4 = PhotoImage(
+        #     file=self.relative_to_assets("entry_4.png"))
+        # self.entry_bg_4 = self.canvas.create_image(
+        #     213.0,
+        #     488.0,
+        #     image=self.entry_image_4
+        # )
+        # self.entry_4 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_4.place(
+        #     x=103.0,
+        #     y=473.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
+    
         self.canvas.create_text(
             99.0,
             443.0,

@@ -2,11 +2,11 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 
 from PIL import Image, ImageTk
-import mysql.connector
-
+# import mysql.connector
+import operaciones_json
 class RegistrarAtencionAgente:
 
     def __init__(self, master):
@@ -17,49 +17,67 @@ class RegistrarAtencionAgente:
 
     def  boton_Registrar_Atencion_Cliente(self):
         #logica del boton
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_4 = self.entry_4.get()
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get()
+        texto_7 = self.entry_7.get()
+        texto_8 = self.entry_8.get()
+        texto_9 = self.entry_9.get("1.0", 'end-1c')
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'ID cliente', texto_4)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'Nombre', texto_3)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'Telefono', texto_1)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'Correo electronico', texto_2)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'RFC', texto_6)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'Fecha', texto_8)
+        operaciones_json.add_to_json('Atencion_Cliente.json', 'Observaciones', texto_9)
+        messagebox.showinfo("Confirmation", "Atención a cliente agregada")
+        
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
         PrincipalAgente(root)
 
-        try:
-            conexion = mysql.connector.connect(
-                host='localhost',
-                user='root',
-                database='lion',
-                password='julianms3'
-            )
+        # try:
+        #     conexion = mysql.connector.connect(
+        #         host='localhost',
+        #         user='root',
+        #         database='lion',
+        #         password='julianms3'
+        #     )
 
-            cursor = conexion.cursor()
+        #     cursor = conexion.cursor()
 
-            mysql_insert_query = "INSERT INTO atenciones (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Obervaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            idCliente = self.entry_1.get()
-            NombreCliente = self.entry_2.get()
-            Telefono = self.entry_3.get()
-            Correo = self.entry_4.get()
-            Fecha = self.entry_5.get()
-            RFC = self.entry_6.get()
-            Observaciones = self.entry_7.get()
+        #     mysql_insert_query = "INSERT INTO atenciones (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Obervaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        #     idCliente = self.entry_1.get()
+        #     NombreCliente = self.entry_2.get()
+        #     Telefono = self.entry_3.get()
+        #     Correo = self.entry_4.get()
+        #     Fecha = self.entry_5.get()
+        #     RFC = self.entry_6.get()
+        #     Observaciones = self.entry_7.get()
 
-            cursor.execute(mysql_insert_query, (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Observaciones))
-           # record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
-           # print(record)
-          #  cursor.exexute(mysql_insert_query, record)
-            #id_Atencion = self.id.get("text")
-            #Fecha = self.fecha.get()
-            #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
+        #     cursor.execute(mysql_insert_query, (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Observaciones))
+        #    # record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
+        #    # print(record)
+        #   #  cursor.exexute(mysql_insert_query, record)
+        #     #id_Atencion = self.id.get("text")
+        #     #Fecha = self.fecha.get()
+        #     #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
 
-            conexion.commit()
-            print("Record inserted successfully into agentes table")
+        #     conexion.commit()
+        #     print("Record inserted successfully into agentes table")
 
-        except mysql.connector.Error as error:
-            print("Failed to insert into MySQL table {}".format(error))
-        finally:
-            if conexion.is_connected:
-                cursor.close()
-                conexion.close()
+        # except mysql.connector.Error as error:
+        #     print("Failed to insert into MySQL table {}".format(error))
+        # finally:
+        #     if conexion.is_connected:
+        #         cursor.close()
+        #         conexion.close()
 
-        messagebox.showinfo("Registro", "Registro de atencion al cliente, registrado")
+        # messagebox.showinfo("Registro", "Registro de atencion al cliente, registrado")
 
         print("boton_Registrar_Atencion_Cliente")
 

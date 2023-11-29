@@ -2,9 +2,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
-
+import operaciones_json
 class VerAgentes:
 
     def __init__(self, master):
@@ -22,6 +22,8 @@ class VerAgentes:
 
     def  boton_Cargar_Agente(self):
         #logica del boton
+        agentes= operaciones_json.read_json("Agente.json")
+        self.entry_1.insert(INSERT,agentes)
         print("boton_Cargar_Agente")
 
     images = []  # Para mantener la imagen creada

@@ -2,8 +2,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
+import operaciones_json
 
 class ModificarCliente:
     def __init__(self, master):
@@ -14,6 +15,41 @@ class ModificarCliente:
 
     def  boton_Modificar_Cliente(self):
         #logica del boton
+
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_4 = self.entry_4.get()
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get()
+        texto_7 = self.entry_7.get()
+        texto_8 = self.entry_8.get()
+        texto_9 = self.entry_9.get()
+        texto_10 = self.entry_10.get()
+        print("1:"+texto_1)
+        print("2:"+texto_2)
+        print("3:"+texto_3)
+        print("4:"+texto_4)
+        print("5:"+texto_5)
+        print("6:"+texto_6)
+        print("7:"+texto_7)
+        print("8:"+texto_8)
+        print("9:"+texto_9)
+        print("10:"+texto_10)
+
+        operaciones_json.add_to_json('Cliente.json', 'ID cliente', '2233431')
+        operaciones_json.add_to_json('Cliente.json', 'Nombre', texto_8)
+        operaciones_json.add_to_json('Cliente.json', 'Nombre de negocio', texto_4)
+        operaciones_json.add_to_json('Cliente.json', 'Telefono', texto_2)
+        operaciones_json.add_to_json('Cliente.json', 'Correo electronico', texto_3)
+        operaciones_json.add_to_json('Cliente.json', 'RFC', texto_7)
+        operaciones_json.add_to_json('Cliente.json', 'NSS', texto_5)
+        operaciones_json.add_to_json('Cliente.json', 'Codigo postal', texto_6)
+        operaciones_json.add_to_json('Cliente.json', 'Regimen', texto_9)
+        operaciones_json.add_to_json('Cliente.json', 'Direccion', texto_10)
+        
+        messagebox.showinfo("Confirmation", "Cliente Modificado")
+
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
@@ -22,6 +58,18 @@ class ModificarCliente:
 
     def  boton_Cargar_Cliente(self):
         #logica del boton
+        Cliente= operaciones_json.read_json("Cliente.json")
+        self.entry_8.insert(INSERT,Cliente["Nombre"])
+        self.entry_4.insert(INSERT,Cliente["Nombre de negocio"])
+        self.entry_2.insert(INSERT,Cliente["Telefono"])
+        self.entry_3.insert(INSERT,Cliente["Correo electronico"])
+        self.entry_7.insert(INSERT,Cliente["RFC"])
+        self.entry_5.insert(INSERT,Cliente["NSS"])
+        self.entry_6.insert(INSERT,Cliente["Codigo postal"])
+        self.entry_9.insert(INSERT,Cliente["Regimen"])
+        self.entry_10.insert(INSERT,Cliente["Direccion"])
+        
+        messagebox.showinfo("Confirmation", "Cliente cargado")
         print("boton_Cargar_Cliente")
 
     def  boton_Atras(self):

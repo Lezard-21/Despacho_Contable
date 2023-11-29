@@ -7,9 +7,10 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
-import mysql.connector
+import operaciones_json
+# import mysql.connector
 
 # ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame1")
 # window.geometry("782x587")
@@ -30,43 +31,47 @@ class VerAtenciones:
 
     def boton_CargarAtenciones(self):
         #logica del boton
-
-        try:
-            conexion = mysql.connector.connect(host='localhost',
-                                               user='root',
-                                               database='lion',
-                                               password='julianms3')
+        AtencionesCliente= operaciones_json.read_json("Atencion_CLiente.json")
+        self.entry_1.insert(INSERT,AtencionesCliente)
+        self.entry_1.insert(INSERT,"\n\nAtenciones Emprendedor\n\n")
+        AtencionesEmprendedor= operaciones_json.read_json("Atencion_Emprendedor.json")
+        self.entry_1.insert(INSERT,AtencionesEmprendedor)
+    #     try:
+    #         conexion = mysql.connector.connect(host='localhost',
+    #                                            user='root',
+    #                                            database='lion',
+    #                                            password='julianms3')
         
-        sql_select_Query = "select * from atenciones"
-        cursor=conexion.cursor()
-        cursor.execute(sql_select_Query)
+    #     sql_select_Query = "select * from atenciones"
+    #     cursor=conexion.cursor()
+    #     cursor.execute(sql_select_Query)
 
-        records = cursor.fetchall()
+    #     records = cursor.fetchall()
 
-        self.entry_1.delete(1.0, END)
-        query = ""
+    #     self.entry_1.delete(1.0, END)
+    #     query = ""
 
-            for row in records:
-                row2 = str("idCliente" + str(row[0]) +
-                       "\n" + "NombreCliente = " + str(row[1]) + "\n"
-                        "\n" + "Telefono = " + str(row[2]) +
-                        "\n" + "Correo = " + str(row[3]) +
-                        "\n" + "Fecha = " + str(row[4]) +
-                        "\n" + "RFC = " + str(row[5]) +
-                        "\n" + "Observaciones = " + str(row[6]) + "\n\n\n")
-            query += row2
-        self.entry_1.insert(END, query)
+    #         for row in records:
+    #             row2 = str("idCliente" + str(row[0]) +
+    #                    "\n" + "NombreCliente = " + str(row[1]) + "\n"
+    #                     "\n" + "Telefono = " + str(row[2]) +
+    #                     "\n" + "Correo = " + str(row[3]) +
+    #                     "\n" + "Fecha = " + str(row[4]) +
+    #                     "\n" + "RFC = " + str(row[5]) +
+    #                     "\n" + "Observaciones = " + str(row[6]) + "\n\n\n")
+    #         query += row2
+    #     self.entry_1.insert(END, query)
 
 
-        except mysql.connector.Error as e:
-            messagebox.showerror("Error", "Error reading data from MySQL table.")
-            # print("Error reading data from MySQL table", e)
-        finally:
-            if connection.is_connected():
-                conexion.close()
-                cursor.close()
+    #     except mysql.connector.Error as e:
+    #         messagebox.showerror("Error", "Error reading data from MySQL table.")
+    #         # print("Error reading data from MySQL table", e)
+    #     finally:
+    #         if connection.is_connected():
+    #             conexion.close()
+    #             cursor.close()
 
-      #  conexion.execut()
+    #   #  conexion.execut()
 
         print("button_Cargar_Atenciones")
 

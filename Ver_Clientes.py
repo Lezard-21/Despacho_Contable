@@ -7,8 +7,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage
 from PIL import Image, ImageTk
+import operaciones_json
 
 # ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame0")
 
@@ -29,6 +30,8 @@ class VerClientes:
 
     def boton_CargarCliente(self):
         #logica del boton
+        Cliente= operaciones_json.read_json("Cliente.json")
+        self.entry_1.insert(INSERT,Cliente)
         print("button_Cargar_Cliente")
 
     # images = []  # Para mantener la imagen creada

@@ -2,10 +2,11 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
-import mysql.connector
+# import mysql.connector
 import random
+import operaciones_json
 
 class RegistrarCliente:
 
@@ -18,37 +19,57 @@ class RegistrarCliente:
     def boton_Registrar_Cliente(self):
         #logica del boton
 
-     #   idcliente = random.randint(1, 99)
+    #  #   idcliente = random.randint(1, 99)
 
-        try:
-            conexion.mysql.connector.connect(host='localhost',
-                                             user='root',
-                                             database='lion',
-                                             password='julianms3')
+    #     try:
+    #         conexion.mysql.connector.connect(host='localhost',
+    #                                          user='root',
+    #                                          database='lion',
+    #                                          password='julianms3')
             
-            cursor = conexion.cursor()
+    #         cursor = conexion.cursor()
 
-            consulta = "INSERT INTO clientes (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            NombresCompletos = self.entry_1.get()
-            NombreNegocio = self.entry_2.get()
-            Telefono1 = self.entry_3.get()
-            Correo1 = self.entry_4.get()
-            RFC = self.entry_5.get()
-            NSS = self.entry_6.get()
-            CP = self.entry_7.get()
-            Direccion = self.entry_8.get()
-            Regimen = self.entry_9.get()
+    #         consulta = "INSERT INTO clientes (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    #         NombresCompletos = self.entry_1.get()
+    #         NombreNegocio = self.entry_2.get()
+    #         Telefono1 = self.entry_3.get()
+    #         Correo1 = self.entry_4.get()
+    #         RFC = self.entry_5.get()
+    #         NSS = self.entry_6.get()
+    #         CP = self.entry_7.get()
+    #         Direccion = self.entry_8.get()
+    #         Regimen = self.entry_9.get()
 
-            cursor.execute(consulta, (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen))
-            conexion.commit()
+    #         cursor.execute(consulta, (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen))
+    #         conexion.commit()
         
-        except msyql.conector.Error as e:
-            print("Failed to insert into MySQL table {}".format(error))
-        finally:
-            if connection.is_connected:
-                cursor.close()
-                conexion.close()
-
+    #     except msyql.conector.Error as e:
+    #         print("Failed to insert into MySQL table {}".format(error))
+    #     finally:
+    #         if connection.is_connected:
+    #             cursor.close()
+    #             conexion.close()32423344
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_4 = self.entry_4.get()
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get()
+        texto_7 = self.entry_7.get()
+        texto_8 = self.entry_8.get()
+        texto_9 = self.entry_9.get()
+        operaciones_json.add_to_json('Cliente.json', 'ID cliente', '32423344')
+        operaciones_json.add_to_json('Cliente.json', 'Nombre', texto_7)
+        operaciones_json.add_to_json('Cliente.json', 'Nombre de negocio', texto_3)
+        operaciones_json.add_to_json('Cliente.json', 'Telefono', texto_1)
+        operaciones_json.add_to_json('Cliente.json', 'Correo electronico', texto_2)
+        operaciones_json.add_to_json('Cliente.json', 'RFC', texto_6)
+        operaciones_json.add_to_json('Cliente.json', 'NSS', texto_4)
+        operaciones_json.add_to_json('Cliente.json', 'Codigo postal', texto_5)
+        operaciones_json.add_to_json('Cliente.json', 'Regimen', texto_8)
+        operaciones_json.add_to_json('Cliente.json', 'Direccion', texto_9)
+        messagebox.showinfo("Confirmation", "Cliente agregado")
+        
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente

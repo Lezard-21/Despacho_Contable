@@ -1,4 +1,4 @@
-from tkinter import Entry, Tk, Canvas, Button, PhotoImage
+from tkinter import Entry, Tk, Canvas, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
 from pathlib import Path
 
@@ -11,14 +11,28 @@ class IniciarSesionAdmin:
         self.crear_interfaz()
 
     def boton_Iniciar_Sesion(self):
-        self.master.destroy()
-        root = Tk()
-        from Principal_Admin import Principal_Admin
-        Principal_Admin(root)
+        users=["rootDavid","rootDavniel","rootJulian","rootIan","rootIvan"]
+        password="1234"
+        texto = self.entry_2.get()
+
+        if texto in users:
+            if(self.entry_1.get() == password):
+                self.master.destroy()
+                root = Tk()
+                from Principal_Admin import Principal_Admin
+                Principal_Admin(root)
+            else:
+             messagebox.showwarning("Warning", "La contraseña no es correcta")        
+        else:
+            messagebox.showwarning("Warning", "EL usuario no se encuentra registrado")        
         print("boton_Iniciar_Sesion")
 
     def boton_Ver_Contraseña(self):
         # lógica del botón
+        if self.entry_1.cget('show') == '*':
+            self.entry_1.config(show='')  # Muestra la contraseña
+        else:
+            self.entry_1.config(show='*')  # Oculta la contraseña
         print("boton_Ver_contraseña")
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
@@ -89,7 +103,8 @@ class IniciarSesionAdmin:
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            show='*'
         )
         self.entry_1.image = self.entry_image_1
         self.entry_1.place(

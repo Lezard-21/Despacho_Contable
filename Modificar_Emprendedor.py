@@ -2,8 +2,8 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from tkinter import INSERT, IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
+import operaciones_json
 from PIL import Image, ImageTk
 class ModificarEmprendedor:
     def __init__(self, master):
@@ -14,6 +14,29 @@ class ModificarEmprendedor:
         
     def  boton_Modificar_Emprendedor(self):
         #logica del boton
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_4 = self.entry_4.get()
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get("1.0", 'end-1c')
+        texto_7 = self.selected_value.get()
+        texto_8 = self.entry_8.get()
+        texto_9 = self.entry_9.get()
+        texto_10 = self.entry_10.get()
+        texto_11 = self.entry_11.get()
+        operaciones_json.add_to_json('Emprendedor.json', 'Nombre', texto_11)
+        operaciones_json.add_to_json('Emprendedor.json', 'Nombre de negocio', texto_10)
+        operaciones_json.add_to_json('Emprendedor.json', 'Telefono', texto_8)
+        operaciones_json.add_to_json('Emprendedor.json', 'Correo electronico', texto_9)
+        operaciones_json.add_to_json('Emprendedor.json', 'RFC', texto_5)
+        operaciones_json.add_to_json('Emprendedor.json', 'NSS', texto_2)
+        operaciones_json.add_to_json('Emprendedor.json', 'Codigo postal', texto_3)
+        operaciones_json.add_to_json('Emprendedor.json', 'Tipo de persona', texto_7)
+        operaciones_json.add_to_json('Emprendedor.json', 'Capital inicial', texto_4)
+        operaciones_json.add_to_json('Emprendedor.json', 'Observaciones', texto_6)
+        
+        messagebox.showinfo("Confirmation", "Emprendedor Modificado")
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
@@ -22,6 +45,22 @@ class ModificarEmprendedor:
 
     def  boton_Cargar_Emprendedor(self):
         #logica del boton
+        Emprendedor= operaciones_json.read_json("Emprendedor.json")
+        self.entry_11.insert(INSERT,Emprendedor["Nombre"])
+        self.entry_10.insert(INSERT,Emprendedor["Nombre de negocio"])
+        self.entry_8.insert(INSERT,Emprendedor["Telefono"])
+        self.entry_9.insert(INSERT,Emprendedor["Correo electronico"])
+        self.entry_5.insert(INSERT,Emprendedor["RFC"])
+        self.entry_2.insert(INSERT,Emprendedor["NSS"])
+        self.entry_3.insert(INSERT,Emprendedor["Codigo postal"])
+
+        if(Emprendedor["Tipo de persona"]=="Productor"):self.selected_value.set("Productor")
+        if(Emprendedor["Tipo de persona"]=="Marketing"):self.selected_value.set("Marketing")
+        if(Emprendedor["Tipo de persona"]=="Equipo de trabajo"):self.selected_value.set("Equipo de trabajo")
+
+        self.entry_4.insert(INSERT,Emprendedor["Capital inicial"])
+        self.entry_6.insert(INSERT,Emprendedor["Observaciones"])
+        messagebox.showinfo("Confirmation", "Emprendedor cargado")
         print("boton_Cargar_Emprendedor")
 
     def  boton_Atras(self):
@@ -179,7 +218,7 @@ class ModificarEmprendedor:
             104.0,
             122.0,
             anchor="nw",
-            text="Cliente",
+            text="Id Emprendedor",
             fill="#FFFFFF",
             font=("WorkSansRoman Regular", 16 * -1)
         )
@@ -334,7 +373,7 @@ class ModificarEmprendedor:
 
         self.canvas.create_rectangle(
             98.0,
-            478.0,
+            378.0,
             339.0,
             631.0,
             fill="#073131",
@@ -343,7 +382,7 @@ class ModificarEmprendedor:
 
         self.canvas.create_text(
             153.0,
-            591.0,
+            530.0,
             anchor="nw",
             text="Equipo de Trabajo",
             fill="#FFFFFF",
@@ -352,7 +391,7 @@ class ModificarEmprendedor:
 
         self.canvas.create_text(
             153.0,
-            545.0,
+            480.0,
             anchor="nw",
             text="Marketing",
             fill="#FFFFFF",
@@ -361,9 +400,9 @@ class ModificarEmprendedor:
 
         self.canvas.create_text(
             153.0,
-            493.0,
+            430.0,
             anchor="nw",
-            text="Productor\n",
+            text="Productor",
             fill="#FFFFFF",
             font=("Inter", 16 * -1)
         )
@@ -433,11 +472,11 @@ class ModificarEmprendedor:
         # )
 
         # Crea una variable para almacenar el valor seleccionado
-        self.selected_value = IntVar()
+        self.selected_value = StringVar()
 
         self.radio1 = Radiobutton(
            self.master,
-           value=1,
+           value="Productor",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
@@ -446,7 +485,7 @@ class ModificarEmprendedor:
         
         self.radio2 = Radiobutton(
            self.master,
-           value=2,
+           value="Marketing",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
@@ -455,45 +494,37 @@ class ModificarEmprendedor:
 
         self.radio3 = Radiobutton(
            self.master,
-           value=3,
+           value="Equipo de trabajo",
            variable=self.selected_value,
            indicatoron=0,
            activebackground='green',
            selectcolor='black'
         )
         # Place radio buttons
-        self.radio1.place(x=106, y=487, width=30.0, height=30.0)
-        self.radio2.place(x=106, y=536, width=30.0, height=30.0)
-        self.radio3.place(x=107, y=585, width=30.0, height=30.0)
+        self.radio1.place(x=106, y=430, width=30.0, height=30.0)
+        self.radio2.place(x=106, y=480, width=30.0, height=30.0)
+        self.radio3.place(x=107, y=530, width=30.0, height=30.0)
 
         ############
-        self.canvas.create_rectangle(
-            98.0,
-            389.0,
-            236.0,
-            448.0,
-            fill="#073131",
-            outline=""
-        )
 
-        self.entry_image_7 = PhotoImage(file=self.relative_to_assets("entry_7.png"))
-        self.entry_bg_7 = self.canvas.create_image(
-            218.0,
-            433.0,
-            image=self.entry_image_7
-        )
-        self.entry_7 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_7.place(
-            x=108.0,
-            y=418.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_7 = PhotoImage(file=self.relative_to_assets("entry_7.png"))
+        # self.entry_bg_7 = self.canvas.create_image(
+        #     218.0,
+        #     433.0,
+        #     image=self.entry_image_7
+        # )
+        # self.entry_7 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_7.place(
+        #     x=108.0,
+        #     y=418.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
 
         self.canvas.create_text(
             104.0,

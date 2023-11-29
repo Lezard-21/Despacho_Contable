@@ -1,7 +1,8 @@
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
+from tkinter.ttk import Combobox
 from PIL import Image, ImageTk
-
+import operaciones_json
 class ModificarAgente:
     def __init__(self, master):
         self.master = master
@@ -11,6 +12,20 @@ class ModificarAgente:
 
     def boton_Modificar_Agente(self):
         # lógica del botón
+        texto_1 = self.entry_1.get()
+        texto_2 = self.entry_2.get()
+        texto_3 = self.entry_3.get()
+        texto_4 = self.entry_4.get("1.0", 'end-1c')
+        texto_5 = self.entry_5.get()
+        texto_6 = self.entry_6.get()
+
+        operaciones_json.add_to_json('Agente.json', 'Nombre', texto_6)
+        operaciones_json.add_to_json('Agente.json', 'Nombre de usuario', texto_2)
+        operaciones_json.add_to_json('Agente.json', 'Contraseña', texto_1)
+        operaciones_json.add_to_json('Agente.json', 'RFC', texto_5)
+        operaciones_json.add_to_json('Agente.json', 'NSS', texto_3)
+        operaciones_json.add_to_json('Agente.json', 'Observaciones', texto_4)
+        messagebox.showinfo("Confirmation", "Agente Modificado")
         self.master.destroy()
         root = Tk()
         from Principal_Admin import Principal_Admin
@@ -19,6 +34,15 @@ class ModificarAgente:
 
     def boton_Cargar_Agente(self):
         # lógica del botón
+        Agente= operaciones_json.read_json("Agente.json")
+        self.entry_6.insert(INSERT,Agente["Nombre"])
+        self.entry_2.insert(INSERT,Agente["Nombre de usuario"])
+        self.entry_1.insert(INSERT,Agente["Contraseña"])
+        self.entry_5.insert(INSERT,Agente["RFC"])
+        self.entry_3.insert(INSERT,Agente["NSS"])
+        self.entry_4.insert(INSERT,Agente["Observaciones"])
+        
+        messagebox.showinfo("Confirmation", "Agente cargado")
         print("boton_Cargar_Agente")
 
     def  boton_Atras(self):
@@ -295,33 +319,17 @@ class ModificarAgente:
             font=("WorkSansRoman Regular", 16 * -1)
         )
 
-        self.entry_image_7 = PhotoImage(file=self.relative_to_assets("entry_7.png"))
-        self.entry_bg_7 = self.canvas.create_image(
-            198.5,
-            189.5,
-            image=self.entry_image_7
-        )
-        self.entry_7 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_7.place(
-            x=89.0,
-            y=173.0,
-            width=219.0,
-            height=31.0
-        )
-
-        self.canvas.create_text(
-            81.0,
-            141.0,
-            anchor="nw",
-            text="Agente",
-            fill="#FFFFFF",
-            font=("WorkSansRoman Regular", 16 * -1)
-        )
+        # self.entry_image_7 = PhotoImage(file=self.relative_to_assets("entry_7.png"))
+        # self.entry_bg_7 = self.canvas.create_image(
+        #     198.5,
+        #     189.5,
+        #     image=self.entry_image_7
+        # )
+        self.comboValues = operaciones_json.read_json("Agente.json")
+        self.nombres = self.comboValues["Nombre"]
+        self.entry_7 = Combobox(self.canvas, values=self.nombres)
+        self.entry_7.place(x=89, y=173, width=219, height=31)
+        self.canvas.create_text(81, 141, anchor="nw", text="Agente", fill="#FFFFFF", font=("WorkSansRoman Regular", 16 * -1))
 
         self.canvas.create_text(
             92.0,

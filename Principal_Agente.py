@@ -44,8 +44,8 @@ class PrincipalAgente:
     def boton_cambiar_Cliente_A_Emprendedor(self):
         self.master.destroy()
         root = Tk()
-        from Registrar_Cliente import RegistrarCliente
-        RegistrarCliente(root)
+        from Ver_Atenciones import VerAtenciones
+        VerAtenciones(root)
         print("boton_cambiar_Cliente_A_Emprendedor")
 
 
