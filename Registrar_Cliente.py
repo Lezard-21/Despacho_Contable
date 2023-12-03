@@ -3,9 +3,11 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
+from tkinter.ttk import Combobox
 from PIL import Image, ImageTk
 # import mysql.connector
 import random
+import Validaciones
 import operaciones_json
 
 class RegistrarCliente:
@@ -15,67 +17,66 @@ class RegistrarCliente:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
 
     def boton_Registrar_Cliente(self):
         #logica del boton
-
-    #  #   idcliente = random.randint(1, 99)
-
-    #     try:
-    #         conexion.mysql.connector.connect(host='localhost',
-    #                                          user='root',
-    #                                          database='lion',
-    #                                          password='julianms3')
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get()
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_4 = self.entry_4.get()
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get()
+            texto_7 = self.entry_7.get()
+            self.texto_8 = ""
+            i = 0
+            for regimen in self.regimen:
+                if(i==self.entry_8.current()):
+                    self.texto_8 = regimen      
+                i = i+1
+            # texto_8 = self.entry_8.get()
+            texto_9 = self.entry_9.get()
+            # operaciones_json.add_to_json('Cliente.json', 'ID cliente', '32423344')
+            operaciones_json.add_to_json('Cliente.json', 'Nombre', texto_7)
+            operaciones_json.add_to_json('Cliente.json', 'Nombre de negocio', texto_3)
+            operaciones_json.add_to_json('Cliente.json', 'Telefono', texto_1)
+            operaciones_json.add_to_json('Cliente.json', 'Correo electronico', texto_2)
+            operaciones_json.add_to_json('Cliente.json', 'RFC', texto_6)
+            operaciones_json.add_to_json('Cliente.json', 'NSS', texto_4)
+            operaciones_json.add_to_json('Cliente.json', 'Codigo postal', texto_5)
+            operaciones_json.add_to_json('Cliente.json', 'Regimen', self.texto_8)
+            operaciones_json.add_to_json('Cliente.json', 'Direccion', texto_9)
+            messagebox.showinfo("Confirmation", "Cliente agregado")
             
-    #         cursor = conexion.cursor()
-
-    #         consulta = "INSERT INTO clientes (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen) values (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    #         NombresCompletos = self.entry_1.get()
-    #         NombreNegocio = self.entry_2.get()
-    #         Telefono1 = self.entry_3.get()
-    #         Correo1 = self.entry_4.get()
-    #         RFC = self.entry_5.get()
-    #         NSS = self.entry_6.get()
-    #         CP = self.entry_7.get()
-    #         Direccion = self.entry_8.get()
-    #         Regimen = self.entry_9.get()
-
-    #         cursor.execute(consulta, (NombresCompletos, NombreNegocio, Telefono1, Correo1, RFC, NSS, CP, Direccion, Regimen))
-    #         conexion.commit()
-        
-    #     except msyql.conector.Error as e:
-    #         print("Failed to insert into MySQL table {}".format(error))
-    #     finally:
-    #         if connection.is_connected:
-    #             cursor.close()
-    #             conexion.close()32423344
-        texto_1 = self.entry_1.get()
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get()
-        texto_7 = self.entry_7.get()
-        texto_8 = self.entry_8.get()
-        texto_9 = self.entry_9.get()
-        operaciones_json.add_to_json('Cliente.json', 'ID cliente', '32423344')
-        operaciones_json.add_to_json('Cliente.json', 'Nombre', texto_7)
-        operaciones_json.add_to_json('Cliente.json', 'Nombre de negocio', texto_3)
-        operaciones_json.add_to_json('Cliente.json', 'Telefono', texto_1)
-        operaciones_json.add_to_json('Cliente.json', 'Correo electronico', texto_2)
-        operaciones_json.add_to_json('Cliente.json', 'RFC', texto_6)
-        operaciones_json.add_to_json('Cliente.json', 'NSS', texto_4)
-        operaciones_json.add_to_json('Cliente.json', 'Codigo postal', texto_5)
-        operaciones_json.add_to_json('Cliente.json', 'Regimen', texto_8)
-        operaciones_json.add_to_json('Cliente.json', 'Direccion', texto_9)
-        messagebox.showinfo("Confirmation", "Cliente agregado")
-        
-        self.master.destroy()
-        root = Tk()
-        from Principal_Agente import PrincipalAgente
-        PrincipalAgente(root)
-        print("boton_Registrar_Cliente")
-
+            self.master.destroy()
+            root = Tk()
+            from Principal_Agente import PrincipalAgente
+            PrincipalAgente(root)
+        print("Error")
+    
+    def validar_entrys(self):
+        if(not Validaciones.validar_rfc(self.entry_6)):
+            return False
+        if(not Validaciones.validar_email(self.entry_2)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_7)):
+            return False
+        if(not Validaciones.validar_numero(self.entry_1)):
+            return False
+        if(not Validaciones.validar_NSS(self.entry_4)):
+            return False
+        if(not Validaciones.validar_codigo_postal(self.entry_5)):
+            return False
+        return True
+    
     def  boton_Atras(self):
         self.master.destroy()
         root = Tk()
@@ -444,25 +445,35 @@ class RegistrarCliente:
             font=("WorkSansRoman Regular", 16 * -1)
         )
 
-        self.entry_image_8 = PhotoImage(
-            file=self.relative_to_assets("entry_8.png"))
-        self.entry_bg_8 = self.canvas.create_image(
-            347.0,
-            493.0,
-            image=self.entry_image_8
-        )
-        self.entry_8 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_8.place(
-            x=237.0,
-            y=478.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_8 = PhotoImage(
+        #     file=self.relative_to_assets("entry_8.png"))
+        # self.entry_bg_8 = self.canvas.create_image(
+        #     347.0,
+        #     493.0,
+        #     image=self.entry_image_8
+        # )
+        # self.entry_8 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_8.place(
+        #     x=237.0,
+        #     y=478.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
+        self.comboValues = operaciones_json.read_json("RegimenFiscal.json")
+        self.regimen = self.comboValues["Regimen"]
+        self.idRegimen = self.comboValues["Id regimen"]
+        cont = 0
+        self.values = []
+        for nombre in self.regimen:
+            self.values.append(nombre+"-"+self.idRegimen[cont])
+            cont = cont + 1
+        self.entry_8 = Combobox(self.canvas, values=self.values)
+        self.entry_8.place(x=237, y=478, width=220, height=28)
 
         self.canvas.create_text(
             233.0,

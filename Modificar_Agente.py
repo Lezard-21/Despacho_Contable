@@ -2,6 +2,7 @@ from pathlib import Path
 from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from tkinter.ttk import Combobox
 from PIL import Image, ImageTk
+import Validaciones
 import operaciones_json
 class ModificarAgente:
     def __init__(self, master):
@@ -9,41 +10,86 @@ class ModificarAgente:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
 
     def boton_Modificar_Agente(self):
         # lógica del botón
-        texto_1 = self.entry_1.get()
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get("1.0", 'end-1c')
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get()
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get()
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_4 = self.entry_4.get("1.0", 'end-1c')
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get()
 
-        operaciones_json.add_to_json('Agente.json', 'Nombre', texto_6)
-        operaciones_json.add_to_json('Agente.json', 'Nombre de usuario', texto_2)
-        operaciones_json.add_to_json('Agente.json', 'Contraseña', texto_1)
-        operaciones_json.add_to_json('Agente.json', 'RFC', texto_5)
-        operaciones_json.add_to_json('Agente.json', 'NSS', texto_3)
-        operaciones_json.add_to_json('Agente.json', 'Observaciones', texto_4)
-        messagebox.showinfo("Confirmation", "Agente Modificado")
-        self.master.destroy()
-        root = Tk()
-        from Principal_Admin import Principal_Admin
-        Principal_Admin(root)
+            operaciones_json.modify_json('Agente.json', 'Nombre',self.nombreAgente, texto_6)
+            operaciones_json.modify_json('Agente.json', 'Nombre de usuario',self.usuarioAgente, texto_2)
+            operaciones_json.modify_json('Agente.json', 'Contraseña',self.contraAgente, texto_1)
+            operaciones_json.modify_json('Agente.json', 'RFC',self.RFCAgente, texto_5)
+            operaciones_json.modify_json('Agente.json', 'NSS',self.NSSAgente, texto_3)
+            operaciones_json.modify_json('Agente.json', 'Observaciones',self.ObserAgente, texto_4)
+            messagebox.showinfo("Confirmation", "Agente Modificado")
+            self.master.destroy()
+            root = Tk()
+            from Principal_Admin import Principal_Admin
+            Principal_Admin(root)
         print("boton_Modificar_Agente")
+    
+    def validar_entrys(self):
+        if(not Validaciones.validar_rfc(self.entry_5)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_6)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_2)):
+            return False
+        if(not Validaciones.validar_NSS(self.entry_3)):
+            return False
+        return True
 
     def boton_Cargar_Agente(self):
         # lógica del botón
-        Agente= operaciones_json.read_json("Agente.json")
-        self.entry_6.insert(INSERT,Agente["Nombre"])
-        self.entry_2.insert(INSERT,Agente["Nombre de usuario"])
-        self.entry_1.insert(INSERT,Agente["Contraseña"])
-        self.entry_5.insert(INSERT,Agente["RFC"])
-        self.entry_3.insert(INSERT,Agente["NSS"])
-        self.entry_4.insert(INSERT,Agente["Observaciones"])
+        if self.entry_1['state'] == 'normal':
+            self.entry_6.delete(0, 'end')
+            self.entry_2.delete(0, 'end')
+            self.entry_1.delete(0, 'end')
+            self.entry_5.delete(0, 'end')
+            self.entry_3.delete(0, 'end')
+            self.entry_4.delete(1.0, 'end')
+
+        self.entry_1['state'] = 'normal'
+        self.entry_2['state'] = 'normal'
+        self.entry_3['state'] = 'normal'
+        self.entry_4['state'] = 'normal'
+        self.entry_5['state'] = 'normal'
+        self.entry_6['state'] = 'normal'
+        
+        print(self.comboValues)
+        nombre_buscado = self.nombres[self.entry_7.current()]
+        indice = self.comboValues["Nombre"].index(nombre_buscado)
+        agente = {k: v[indice] for k, v in self.comboValues.items()} 
+        # Agente= operaciones_json.read_json("Agente.json")
+        self.entry_6.insert(INSERT,agente["Nombre"])
+        self.entry_2.insert(INSERT,agente["Nombre de usuario"])
+        self.entry_1.insert(INSERT,agente["Contraseña"])
+        self.entry_5.insert(INSERT,agente["RFC"])
+        self.entry_3.insert(INSERT,agente["NSS"])
+        self.entry_4.insert(INSERT,agente["Observaciones"])
+
+        self.nombreAgente=agente["Nombre"]
+        self.usuarioAgente=agente["Nombre de usuario"]
+        self.contraAgente=agente["Contraseña"]
+        self.RFCAgente=agente["RFC"]
+        self.NSSAgente=agente["NSS"]
+        self.ObserAgente=agente["Observaciones"]
         
         messagebox.showinfo("Confirmation", "Agente cargado")
-        print("boton_Cargar_Agente")
 
     def  boton_Atras(self):
         self.master.destroy()
@@ -327,8 +373,17 @@ class ModificarAgente:
         # )
         self.comboValues = operaciones_json.read_json("Agente.json")
         self.nombres = self.comboValues["Nombre"]
-        self.entry_7 = Combobox(self.canvas, values=self.nombres)
+        self.RFC = self.comboValues["RFC"]
+        cont = 0
+        self.values = []
+        for nombre in self.nombres:
+            print(nombre)
+            self.values.append(nombre+"-"+self.RFC[cont])
+            cont = cont + 1
+        self.entry_7 = Combobox(self.canvas, values=self.values)
         self.entry_7.place(x=89, y=173, width=219, height=31)
+
+
         self.canvas.create_text(81, 141, anchor="nw", text="Agente", fill="#FFFFFF", font=("WorkSansRoman Regular", 16 * -1))
 
         self.canvas.create_text(
@@ -339,7 +394,12 @@ class ModificarAgente:
             fill="#FFFFFF",
             font=("WorkSansRoman Bold", 20 * -1)
         )
-
+        self.entry_1['state'] = 'disabled'
+        self.entry_2['state'] = 'disabled'
+        self.entry_3['state'] = 'disabled'
+        self.entry_4['state'] = 'disabled'
+        self.entry_5['state'] = 'disabled'
+        self.entry_6['state'] = 'disabled'
         self.master.geometry("717x709")
         self.master.configure(bg="#FFFFFF")
         self.master.resizable(False,False)

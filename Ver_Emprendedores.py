@@ -7,7 +7,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import INSERT, Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
 import operaciones_json
 
 from PIL import Image, ImageTk
@@ -19,6 +19,14 @@ class VerEmprendedores:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
             
     def boton_Atras(self):
         self.master.destroy()
@@ -32,6 +40,18 @@ class VerEmprendedores:
         Emprendedor= operaciones_json.read_json("Emprendedor.json")
         self.entry_1.insert(INSERT,Emprendedor)
         print("button_Cargar_Emprendedores")
+
+    def cargar_datos(self, treeview, datos):
+        for i in treeview.get_children():
+            treeview.delete(i)
+
+        claves = list(datos.keys())
+
+        num_filas = len(datos[claves[0]])
+
+        for i in range(num_filas):
+            fila = [datos[clave][i] for clave in claves]
+            treeview.insert("", "end", values=fila)
 
     def create_rectangle(self, x1, y1, x2, y2, **kwargs):
         if 'alpha' in kwargs:
@@ -129,23 +149,24 @@ class VerEmprendedores:
             height=63.0
         )
 
-        self.entry_image_1 = PhotoImage(
-            file=self.relative_to_assets("entry_1.png"))
-        self.entry_bg_1 = self.canvas.create_image(
-            390.5,
-            297.5,
-            image=self.entry_image_1
-        )
-        self.entry_1 = Text(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_1.place(
-            x=153.0,
+        datos = operaciones_json.read_json("Emprendedor.json")
+        print(datos)
+
+        treeview = ttk.Treeview(self.master)
+        
+        columnas = list(datos.keys())
+        treeview["columns"] = columnas
+        treeview["show"] = "headings"  
+
+        for columna in columnas:
+            treeview.heading(columna, text=columna)
+            treeview.column(columna, width=70, anchor="center")  
+
+        self.cargar_datos(treeview,datos)
+        treeview.place(
+            x=0.0,
             y=200.0,
-            width=475.0,
+            width=800.0,
             height=193.0
         )
 

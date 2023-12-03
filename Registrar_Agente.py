@@ -5,6 +5,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
 import operaciones_json
+import Validaciones
 
 class RegistrarAgente:
 
@@ -13,29 +14,49 @@ class RegistrarAgente:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
         
     def  boton_Registrar_Agente(self):
         #logica del boton
-        texto_1 = self.entry_1.get("1.0", 'end-1c')
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get()
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get("1.0", 'end-1c')
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_4 = self.entry_4.get()
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get()
 
-        operaciones_json.add_to_json('Agente.json', 'Nombre', texto_4)
-        operaciones_json.add_to_json('Agente.json', 'Nombre de usuario', texto_3)
-        operaciones_json.add_to_json('Agente.json', 'Contraseña', texto_2)
-        operaciones_json.add_to_json('Agente.json', 'RFC', texto_6)
-        operaciones_json.add_to_json('Agente.json', 'NSS', texto_5)
-        operaciones_json.add_to_json('Agente.json', 'Observaciones', texto_1)
-        messagebox.showinfo("Confirmation", "Agente agregado")
-        
-        self.master.destroy()
-        root = Tk()
-        from Principal_Admin import Principal_Admin
-        Principal_Admin(root)
+            operaciones_json.add_to_json('Agente.json', 'Nombre', texto_4)
+            operaciones_json.add_to_json('Agente.json', 'Nombre de usuario', texto_3)
+            operaciones_json.add_to_json('Agente.json', 'Contraseña', texto_2)
+            operaciones_json.add_to_json('Agente.json', 'RFC', texto_6)
+            operaciones_json.add_to_json('Agente.json', 'NSS', texto_5)
+            operaciones_json.add_to_json('Agente.json', 'Observaciones', texto_1)
+            messagebox.showinfo("Confirmation", "Agente agregado")
+            
+            self.master.destroy()
+            root = Tk()
+            from Principal_Admin import Principal_Admin
+            Principal_Admin(root)
         print("boton_Registrar_Agente")
+    
+    def validar_entrys(self):
+        if(not Validaciones.validar_rfc(self.entry_6)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_3)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_4)):
+            return False
+        if(not Validaciones.validar_NSS(self.entry_5)):
+            return False
+        return True
     
     def  boton_Atras(self):
         self.master.destroy()

@@ -29,9 +29,14 @@ def remove_from_json(filename, key):
       with open(filename, 'w') as f:
           json.dump(data, f)
 
-def modify_json(filename, key, new_value):
-  data = read_json(filename)
-  if key in data:
-      data[key] = new_value
-      with open(filename, 'w') as f:
-          json.dump(data, f)
+
+def modify_json(filename, key, old_value, new_value):
+    with open(filename, 'r') as f:
+        data = json.load(f)
+
+    if key in data and old_value in data[key]:
+        index = data[key].index(old_value)
+        data[key][index] = new_value
+
+    with open(filename, 'w') as f:
+        json.dump(data, f)

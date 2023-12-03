@@ -4,6 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
+import Validaciones
 import operaciones_json
 
 class RegistrarEmprendedor:
@@ -13,38 +14,76 @@ class RegistrarEmprendedor:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 8 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
         
     def  boton_Registrar_Emprendedor(self):
         #logica del boton
-        texto_1 = self.entry_1.get("1.0", 'end-1c')
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get()
-        texto_4 = self.selected_value.get()
-        texto_7 = self.entry_7.get()
-        texto_8 = self.entry_8.get()
-        texto_9 = self.entry_9.get()
-        texto_10 = self.entry_10.get()
-        operaciones_json.add_to_json('Emprendedor.json', 'Nombre', texto_6)
-        operaciones_json.add_to_json('Emprendedor.json', 'Nombre de negocio', texto_5)
-        operaciones_json.add_to_json('Emprendedor.json', 'Telefono', texto_2)
-        operaciones_json.add_to_json('Emprendedor.json', 'Correo electronico', texto_3)
-        operaciones_json.add_to_json('Emprendedor.json', 'RFC', texto_10)
-        operaciones_json.add_to_json('Emprendedor.json', 'NSS', texto_7)
-        operaciones_json.add_to_json('Emprendedor.json', 'Codigo postal', texto_8)
-        operaciones_json.add_to_json('Emprendedor.json', 'Tipo de persona', texto_4)
-        operaciones_json.add_to_json('Emprendedor.json', 'Capital inicial', texto_9)
-        operaciones_json.add_to_json('Emprendedor.json', 'Observaciones', texto_1)
-        messagebox.showinfo("Confirmation", "Emprendedor agregado")
-        
-        self.master.destroy()
-        root = Tk()
-        from Principal_Agente import PrincipalAgente
-        PrincipalAgente(root)
-        print("boton_Registrar_Emprendedor")
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get("1.0", 'end-1c')
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get()
+            texto_4 = self.selected_value.get()
+            texto_7 = self.entry_7.get()
+            texto_8 = self.entry_8.get()
+            texto_9 = self.entry_9.get()
+            texto_10 = self.entry_11.get()
+
+            print(texto_10)
+            operaciones_json.add_to_json('Emprendedor.json', 'Nombre', texto_6)
+            operaciones_json.add_to_json('Emprendedor.json', 'Nombre de negocio', texto_5)
+            operaciones_json.add_to_json('Emprendedor.json', 'Telefono', texto_2)
+            operaciones_json.add_to_json('Emprendedor.json', 'Correo electronico', texto_3)
+            operaciones_json.add_to_json('Emprendedor.json', 'RFC', texto_10)
+            operaciones_json.add_to_json('Emprendedor.json', 'NSS', texto_7)
+            operaciones_json.add_to_json('Emprendedor.json', 'Codigo postal', texto_8)
+            operaciones_json.add_to_json('Emprendedor.json', 'Tipo de persona', texto_4)
+            operaciones_json.add_to_json('Emprendedor.json', 'Capital inicial', texto_9)
+            operaciones_json.add_to_json('Emprendedor.json', 'Observaciones', texto_1)
+            messagebox.showinfo("Confirmation", "Emprendedor agregado")
+            
+            self.master.destroy()
+            root = Tk()
+            from Principal_Agente import PrincipalAgente
+            PrincipalAgente(root)
+        print("Error")
+
+    def validar_entrys(self):
+        if(not Validaciones.validar_rfc(self.entry_11)):
+            return False
+        if(not Validaciones.validar_email(self.entry_3)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_6)):
+            return False
+        if(not Validaciones.validar_numero(self.entry_2)):
+            return False
+        if(not Validaciones.validar_NSS(self.entry_7)):
+            return False
+        if(not Validaciones.validar_codigo_postal(self.entry_8)):
+            return False
+        if(not Validaciones.validar_Capital_inicial(self.entry_9)):
+            return False
+        return True
 
     def  boton_Atras(self):
+ 
+        # # Ejemplos de RFC válidos
+        # rfc_valido_1 = "XEXT990101NI4"
+
+        # # Validar RFCs
+        # resultado_1 = validar_rfc(rfc_valido_1)
+
+        # # Mostrar resultados
+        # print(f"¿El RFC '{rfc_valido_1}' es válido? {resultado_1}")
+
         self.master.destroy()
         root = Tk()
         from Principal_Agente import PrincipalAgente
@@ -587,25 +626,25 @@ class RegistrarEmprendedor:
             font=("Inter", 16 * -1)
         )
 
-        self.entry_image_10 = PhotoImage(
-            file=self.relative_to_assets("entry_10.png"))
-        self.entry_bg_10 = self.canvas.create_image(
-            520.0,
-            127.0,
-            image=self.entry_image_10
-        )
-        self.entry_10 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_10.place(
-            x=410.0,
-            y=112.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_10 = PhotoImage(
+        #     file=self.relative_to_assets("entry_10.png"))
+        # self.entry_bg_10 = self.canvas.create_image(
+        #     520.0,
+        #     127.0,
+        #     image=self.entry_image_10
+        # )
+        # self.entry_10 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_10.place(
+        #     x=410.0,
+        #     y=112.0,
+        #     width=22000.0,
+        #     height=28.0
+        # )
 
         self.canvas.create_text(
             403.0,

@@ -4,6 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from PIL import Image, ImageTk
+import Validaciones
 # import mysql.connector
 import operaciones_json
 class RegistrarAtencionEmprendedor:
@@ -13,77 +14,76 @@ class RegistrarAtencionEmprendedor:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
             
     def  boton_Registrar_Atencion_Emprendedor(self):
         #logica del boton
-        texto_1 = self.entry_1.get()
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get("1.0", 'end-1c')
-        # texto_7 = self.entry_7.get()
-        # texto_8 = self.entry_8.get()
-        # texto_9 = self.entry_9.get("1.0", 'end-1c')s
-        print("1: "+texto_1)
-        print("2: "+texto_2)
-        print("3: "+texto_3)
-        print("4: "+texto_4)
-        print("5: "+texto_5)
-        print("6: "+texto_6)
-        # print("7: "+texto_7)
-        # print("8: "+texto_8)
-        # print("9: "+texto_9)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Nombre', texto_3)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Telefono', texto_1)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Correo electronico', texto_2)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'RFC', texto_5)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Fecha', texto_4)
-        operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Observaciones', texto_6)
-        messagebox.showinfo("Confirmation", "Atencion a emprendedor agregado")
-        
-        self.master.destroy()
-        root = Tk()
-        from Principal_Agente import PrincipalAgente
-        PrincipalAgente(root)
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get()
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_4 = self.entry_4.get()
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get("1.0", 'end-1c')
+            # texto_7 = self.entry_7.get()
+            # texto_8 = self.entry_8.get()
+            # texto_9 = self.entry_9.get("1.0", 'end-1c')s
+            print("1: "+texto_1)
+            print("2: "+texto_2)
+            print("3: "+texto_3)
+            print("4: "+texto_4)
+            print("5: "+texto_5)
+            print("6: "+texto_6)
+            # print("7: "+texto_7)
+            # print("8: "+texto_8)
+            # print("9: "+texto_9)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Nombre', texto_3)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Telefono', texto_1)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Correo electronico', texto_2)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'RFC', texto_5)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Fecha', texto_4)
+            operaciones_json.add_to_json('Atencion_Emprendedor.json', 'Observaciones', texto_6)
+            messagebox.showinfo("Confirmation", "Atencion a emprendedor agregado")
+            
+            self.master.destroy()
+            root = Tk()
+            from Principal_Agente import PrincipalAgente
+            PrincipalAgente(root)
 
-        # try:
-        #     conexion = mysql.connector.connect(
-        #         host='localhost',
-        #         user='root',
-        #         database='lion',
-        #         password='julianms3'
-        #     )
-
-        #     cursor = conexion.cursor()
-
-        #     mysql_insert_query = "INSERT INTO atencionesemprendedores (NombreCliente, Telefono, Correo, RFC, Fecha, Observaciones) VALUES (%s, %s, %s, %s, %s, %s)"
-        #     nombreCliente = self.entry_1.get()
-        #     Telefono = self.entry_2.get()
-        #     Correo = self.entry_3.get()
-        #     rfc = self.entry_4.get()
-        #     Fecha = self.entry_5.get()
-        #     Observaciones = self.entry_6.get() 
-        #   #  record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
-        #   #  print(record)
-        #     cusor.exexute(mysql_insert_query, (nombreCliete, Telefono, Correo, rfc, Fecha, Observaciones))
-        #     #id_Atencion = self.id.get("text")
-        #     #Fecha = self.fecha.get()
-        #     #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
-
-        #     conexion.commit()
-        #     print("Record inserted successfully into agentes table")
-
-        # except mysql.connector.Error as error:
-        #     print("Failed to insert into MySQL table {}".format(error))
-        # finally:
-        #     if conexion.is_connected:
-        #         cursor.close()
-        #         conexion.close()
-
-        # messagebox.showinfo("Registro","registro de atencion al emprendedor, registrado")
-        
         print("boton_Registrar_Atencion_Emprendedor")
+
+    # Valida si el RFC existe en el json cliente
+    def validar_Existencia_RFC(self,entry):
+        jsonValues = operaciones_json.read_json("Emprendedor.json")
+        buscar = entry.get()
+        rfc = jsonValues["RFC"]
+        for v in rfc:
+            if(v==buscar):
+                return True
+        messagebox.showerror(title="Error dato no existe",message="El RFC que ingreso no se encuentra registrado")
+        return False
+    
+    def validar_entrys(self):
+        if(not self.validar_Existencia_RFC(self.entry_5)):
+            return False
+        if(not Validaciones.validar_rfc(self.entry_5)):
+            return False
+        if(not Validaciones.validar_email(self.entry_2)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_3)):
+            return False
+        if(not Validaciones.validar_numero(self.entry_1)):
+            return False
+        if(not Validaciones.validar_fecha(self.entry_4)):
+            return False
+        return True
 
     def  boton_Atras(self):
         self.master.destroy()

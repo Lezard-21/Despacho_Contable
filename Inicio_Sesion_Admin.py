@@ -9,6 +9,14 @@ class IniciarSesionAdmin:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
 
     def boton_Iniciar_Sesion(self):
         users=["rootDavid","rootDavniel","rootJulian","rootIan","rootIvan"]

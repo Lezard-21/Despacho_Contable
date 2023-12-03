@@ -3,49 +3,118 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import INSERT, IntVar, Radiobutton, StringVar, Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
+from tkinter.ttk import Combobox
 import operaciones_json
 from PIL import Image, ImageTk
+import Validaciones
 class ModificarEmprendedor:
     def __init__(self, master):
         self.master = master
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 8 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 4 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
         
     def  boton_Modificar_Emprendedor(self):
         #logica del boton
-        texto_1 = self.entry_1.get()
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get("1.0", 'end-1c')
-        texto_7 = self.selected_value.get()
-        texto_8 = self.entry_8.get()
-        texto_9 = self.entry_9.get()
-        texto_10 = self.entry_10.get()
-        texto_11 = self.entry_11.get()
-        operaciones_json.add_to_json('Emprendedor.json', 'Nombre', texto_11)
-        operaciones_json.add_to_json('Emprendedor.json', 'Nombre de negocio', texto_10)
-        operaciones_json.add_to_json('Emprendedor.json', 'Telefono', texto_8)
-        operaciones_json.add_to_json('Emprendedor.json', 'Correo electronico', texto_9)
-        operaciones_json.add_to_json('Emprendedor.json', 'RFC', texto_5)
-        operaciones_json.add_to_json('Emprendedor.json', 'NSS', texto_2)
-        operaciones_json.add_to_json('Emprendedor.json', 'Codigo postal', texto_3)
-        operaciones_json.add_to_json('Emprendedor.json', 'Tipo de persona', texto_7)
-        operaciones_json.add_to_json('Emprendedor.json', 'Capital inicial', texto_4)
-        operaciones_json.add_to_json('Emprendedor.json', 'Observaciones', texto_6)
-        
-        messagebox.showinfo("Confirmation", "Emprendedor Modificado")
-        self.master.destroy()
-        root = Tk()
-        from Principal_Agente import PrincipalAgente
-        PrincipalAgente(root)
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get()
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            texto_4 = self.entry_4.get()
+            texto_5 = self.entry_5.get()
+            texto_6 = self.entry_6.get("1.0", 'end-1c')
+            texto_7 = self.selected_value.get()
+            texto_8 = self.entry_8.get()
+            texto_9 = self.entry_9.get()
+            texto_10 = self.entry_10.get()
+            texto_11 = self.entry_11.get()
+            operaciones_json.modify_json('Emprendedor.json', 'Nombre',self.nombreE ,texto_11)
+            operaciones_json.modify_json('Emprendedor.json', 'Nombre de negocio',self.negocioE, texto_10)
+            operaciones_json.modify_json('Emprendedor.json', 'Telefono',self.telefonoE, texto_8)
+            operaciones_json.modify_json('Emprendedor.json', 'Correo electronico',self.correoE, texto_9)
+            operaciones_json.modify_json('Emprendedor.json', 'RFC',self.RFCE, texto_5)
+            operaciones_json.modify_json('Emprendedor.json', 'NSS',self.NSSE, texto_2)
+            operaciones_json.modify_json('Emprendedor.json', 'Codigo postal',self.codigoE, texto_3)
+            operaciones_json.modify_json('Emprendedor.json', 'Tipo de persona',self.tipoPersonaE, texto_7)
+            operaciones_json.modify_json('Emprendedor.json', 'Capital inicial',self.capitalE, texto_4)
+            operaciones_json.modify_json('Emprendedor.json', 'Observaciones',self.observE, texto_6)
+            
+            messagebox.showinfo("Confirmation", "Emprendedor Modificado")
+            self.master.destroy()
+            root = Tk()
+            from Principal_Agente import PrincipalAgente
+            PrincipalAgente(root)
         print("boton_Modificar_Emprendedor")
+
+    def validar_entrys(self):
+        if(not Validaciones.validar_rfc(self.entry_5)):
+            return False
+        if(not Validaciones.validar_email(self.entry_9)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_11)):
+            return False
+        if(not Validaciones.validar_numero(self.entry_8)):
+            return False
+        if(not Validaciones.validar_NSS(self.entry_2)):
+            return False
+        if(not Validaciones.validar_codigo_postal(self.entry_3)):
+            return False
+        if(not Validaciones.validar_Capital_inicial(self.entry_4)):
+            return False
+        return True
 
     def  boton_Cargar_Emprendedor(self):
         #logica del boton
-        Emprendedor= operaciones_json.read_json("Emprendedor.json")
+        if self.entry_2['state'] == 'normal':
+            self.entry_2.delete(0, 'end')
+            self.entry_3.delete(0, 'end')
+            self.entry_4.delete(0, 'end')
+            self.entry_5.delete(0, 'end')
+            self.entry_6.delete(1.0, 'end')
+            # self.entry_7.delete(0, 'end')
+            self.entry_8.delete(0, 'end')
+            self.entry_9.delete(0, 'end')
+            self.entry_10.delete(0, 'end')
+            self.entry_11.delete(0, 'end')
+
+        self.entry_2['state'] = 'normal'
+        self.entry_3['state'] = 'normal'
+        self.entry_4['state'] = 'normal'
+        self.entry_5['state'] = 'normal'
+        self.entry_6['state'] = 'normal'
+        self.radio1['state'] = 'normal'
+        self.radio2['state'] = 'normal'
+        self.radio3['state'] = 'normal'
+        self.entry_8['state'] = 'normal'
+        self.entry_9['state'] = 'normal'
+        self.entry_10['state'] = 'normal'
+        self.entry_11['state'] = 'normal'
+
+        print(self.comboValues)
+        nombre_buscado = self.nombres[self.entry_1.current()]
+        indice = self.comboValues["Nombre"].index(nombre_buscado)
+        Emprendedor = {k: v[indice] for k, v in self.comboValues.items()} 
+
+        self.nombreE=Emprendedor["Nombre"]
+        self.negocioE=Emprendedor["Nombre de negocio"]
+        self.telefonoE=Emprendedor["Telefono"]
+        self.correoE=Emprendedor["Correo electronico"]
+        self.RFCE=Emprendedor["RFC"]
+        self.NSSE=Emprendedor["NSS"]
+        self.codigoE=Emprendedor["Codigo postal"]
+        self.tipoPersonaE= Emprendedor["Tipo de persona"]
+        self.capitalE=Emprendedor["Capital inicial"]
+        self.observE=Emprendedor["Observaciones"]
+
+        # Emprendedor= operaciones_json.read_json("Emprendedor.json")
         self.entry_11.insert(INSERT,Emprendedor["Nombre"])
         self.entry_10.insert(INSERT,Emprendedor["Nombre de negocio"])
         self.entry_8.insert(INSERT,Emprendedor["Telefono"])
@@ -60,6 +129,7 @@ class ModificarEmprendedor:
 
         self.entry_4.insert(INSERT,Emprendedor["Capital inicial"])
         self.entry_6.insert(INSERT,Emprendedor["Observaciones"])
+
         messagebox.showinfo("Confirmation", "Emprendedor cargado")
         print("boton_Cargar_Emprendedor")
 
@@ -195,24 +265,35 @@ class ModificarEmprendedor:
             height=51.0
         )
 
-        self.entry_image_1 = PhotoImage(file=self.relative_to_assets("entry_1.png"))
-        self.entry_bg_1 = self.canvas.create_image(
-            218.0,
-            167.0,
-            image=self.entry_image_1
-        )
-        self.entry_1 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_1.place(
-            x=108.0,
-            y=152.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_1 = PhotoImage(file=self.relative_to_assets("entry_1.png"))
+        # self.entry_bg_1 = self.canvas.create_image(
+        #     218.0,
+        #     167.0,
+        #     image=self.entry_image_1
+        # )
+        # self.entry_1 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_1.place(
+        #     x=108.0,
+        #     y=152.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
+        self.comboValues = operaciones_json.read_json("Emprendedor.json")
+        self.nombres = self.comboValues["Nombre"]
+        self.RFC = self.comboValues["RFC"]
+        cont = 0
+        self.values = []
+        for nombre in self.nombres:
+            print(nombre)
+            self.values.append(nombre+"-"+self.RFC[cont])
+            cont = cont + 1
+        self.entry_1 = Combobox(self.canvas, values=self.values)
+        self.entry_1.place(x=108, y=152, width=220, height=28)
 
         self.canvas.create_text(
             104.0,
@@ -707,7 +788,19 @@ class ModificarEmprendedor:
             fill="#FFFFFF",
             font=("WorkSansRoman Regular", 16 * -1)
         )
-        
+
+        self.entry_2['state'] = 'disabled'
+        self.entry_3['state'] = 'disabled'
+        self.entry_4['state'] = 'disabled'
+        self.entry_5['state'] = 'disabled'
+        self.entry_6['state'] = 'disabled'
+        self.radio1['state'] = 'disabled'
+        self.radio2['state'] = 'disabled'
+        self.radio3['state'] = 'disabled'
+        self.entry_8['state'] = 'disabled'
+        self.entry_9['state'] = 'disabled'
+        self.entry_10['state'] = 'disabled'
+        self.entry_11['state'] = 'disabled'
         self.master.geometry("989x771")
         self.master.configure(bg="#FFFFFF")
         self.master.resizable(False,False)

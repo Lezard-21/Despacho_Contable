@@ -15,46 +15,27 @@ class RegistrarRegimen:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 2 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
 
     def  boton_Registrar_Regimen(self):
         texto_1 = self.entry_1.get()
         texto_2 = self.entry_2.get()
         print("1: "+texto_1)
         print("2: "+texto_2)
-        operaciones_json.add_to_json('RegimenFiscal.json', 'Id regimen', texto_1)
-        operaciones_json.add_to_json('RegimenFiscal.json', 'Regimen', texto_2)
+        operaciones_json.add_to_json('RegimenFiscal.json', 'Id regimen', texto_2)
+        operaciones_json.add_to_json('RegimenFiscal.json', 'Regimen', texto_1)
         messagebox.showinfo("Confirmation", "Regimen agregado")
         self.master.destroy()
         root = Tk()
         from Principal_Admin import Principal_Admin
         Principal_Admin(root)
-
-        # try:
-        #     conexion = mysql.connector.connect(
-        #     host='localhost',
-        #     user='root',
-        #     password='julianms3',
-        #     database='lion'
-        #     )
-
-        #     cursor = conexion.cursor()
-
-        #     consulta = "INSERT INTO regimen (idRegimen, Regimen) VALUES (%s, %s)"
-        #     id_regimen = self.entry_1.get()
-        #     regimen = self.entry_2.get()
-
-        #     cursor.execute(consulta, (id_regimen, regimen))
-
-        #     conexion.commit()
-
-        # except mysql.connector.Error as e:
-        #     messagebox.showerror("Error", "Error reading data from MySQL table.")
-        # finally:
-        #     if connection.is_connected():
-        #         cursor.close()
-        #         conexion.close()
-
-        # messagebox.showinfo(message="El Régimen fue agregado exitosamente", title="Régimen")
         print("boton_Registrar_Regimen")
 
     def  boton_Atras(self):

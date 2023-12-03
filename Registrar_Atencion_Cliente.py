@@ -3,7 +3,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
-
+import Validaciones
 from PIL import Image, ImageTk
 # import mysql.connector
 import operaciones_json
@@ -14,73 +14,67 @@ class RegistrarAtencionAgente:
         self.images = []
         self.canvas = None
         self.crear_interfaz()
+        self.center_window()
+
+    def center_window(self):
+        window_width = self.master.winfo_reqwidth()
+        window_height = self.master.winfo_reqheight()
+        position_top = int(self.master.winfo_screenheight() / 6 - window_height / 2)
+        position_right = int(self.master.winfo_screenwidth() / 3 - window_width / 2)
+        self.master.geometry("+{}+{}".format(position_right, position_top))
 
     def  boton_Registrar_Atencion_Cliente(self):
         #logica del boton
-        texto_1 = self.entry_1.get()
-        texto_2 = self.entry_2.get()
-        texto_3 = self.entry_3.get()
-        texto_4 = self.entry_4.get()
-        texto_5 = self.entry_5.get()
-        texto_6 = self.entry_6.get()
-        texto_7 = self.entry_7.get()
-        texto_8 = self.entry_8.get()
-        texto_9 = self.entry_9.get("1.0", 'end-1c')
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'ID cliente', texto_4)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'Nombre', texto_3)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'Telefono', texto_1)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'Correo electronico', texto_2)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'RFC', texto_6)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'Fecha', texto_8)
-        operaciones_json.add_to_json('Atencion_Cliente.json', 'Observaciones', texto_9)
-        messagebox.showinfo("Confirmation", "Atención a cliente agregada")
-        
-        self.master.destroy()
-        root = Tk()
-        from Principal_Agente import PrincipalAgente
-        PrincipalAgente(root)
-
-        # try:
-        #     conexion = mysql.connector.connect(
-        #         host='localhost',
-        #         user='root',
-        #         database='lion',
-        #         password='julianms3'
-        #     )
-
-        #     cursor = conexion.cursor()
-
-        #     mysql_insert_query = "INSERT INTO atenciones (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Obervaciones) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        #     idCliente = self.entry_1.get()
-        #     NombreCliente = self.entry_2.get()
-        #     Telefono = self.entry_3.get()
-        #     Correo = self.entry_4.get()
-        #     Fecha = self.entry_5.get()
-        #     RFC = self.entry_6.get()
-        #     Observaciones = self.entry_7.get()
-
-        #     cursor.execute(mysql_insert_query, (idCliente, NombreCliente, Telefono, Correo, Fecha, RFC, Observaciones))
-        #    # record = (v1, v2, "", "", "", "", "", v3, v4, v5, "", v6, "")
-        #    # print(record)
-        #   #  cursor.exexute(mysql_insert_query, record)
-        #     #id_Atencion = self.id.get("text")
-        #     #Fecha = self.fecha.get()
-        #     #cursor.execute(mysql_insert_query, (id_Atencion, Fecha))
-
-        #     conexion.commit()
-        #     print("Record inserted successfully into agentes table")
-
-        # except mysql.connector.Error as error:
-        #     print("Failed to insert into MySQL table {}".format(error))
-        # finally:
-        #     if conexion.is_connected:
-        #         cursor.close()
-        #         conexion.close()
-
-        # messagebox.showinfo("Registro", "Registro de atencion al cliente, registrado")
-
+        if(self.validar_entrys()):
+            texto_1 = self.entry_1.get()
+            texto_2 = self.entry_2.get()
+            texto_3 = self.entry_3.get()
+            # texto_4 = self.entry_4.get()
+            texto_6 = self.entry_6.get()
+            # texto_7 = self.entry_7.get()
+            texto_8 = self.entry_8.get()
+            texto_9 = self.entry_9.get("1.0", 'end-1c')
+            # operaciones_json.add_to_json('Atencion_Cliente.json', 'ID cliente', texto_4)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'Nombre', texto_3)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'Telefono', texto_1)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'Correo electronico', texto_2)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'RFC', texto_6)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'Fecha', texto_8)
+            operaciones_json.add_to_json('Atencion_Cliente.json', 'Observaciones', texto_9)
+            messagebox.showinfo("Confirmation", "Atención a cliente agregada")
+            
+            self.master.destroy()
+            root = Tk()
+            from Principal_Agente import PrincipalAgente
+            PrincipalAgente(root)
         print("boton_Registrar_Atencion_Cliente")
 
+    # Valida si el RFC existe en el json cliente
+    def validar_Existencia_RFC(self,entry):
+        jsonValues = operaciones_json.read_json("Cliente.json")
+        buscar = entry.get()
+        rfc = jsonValues["RFC"]
+        for v in rfc:
+            if(v==buscar):
+                return True
+        messagebox.showerror(title="Error dato no existe",message="El RFC que ingreso no se encuentra registrado")
+        return False
+    
+    def validar_entrys(self):
+        if(not self.validar_Existencia_RFC(self.entry_6)):
+            return False
+        if(not Validaciones.validar_rfc(self.entry_6)):
+            return False
+        if(not Validaciones.validar_email(self.entry_2)):
+            return False
+        if(not Validaciones.validar_nombre(self.entry_3)):
+            return False
+        if(not Validaciones.validar_numero(self.entry_1)):
+            return False
+        if(not Validaciones.validar_fecha(self.entry_8)):
+            return False
+        return True
+    
     def  boton_Atras(self):
         self.master.destroy()
         root = Tk()
@@ -302,70 +296,70 @@ class RegistrarAtencionAgente:
             font=("WorkSansRoman Regular", 16 * -1)
         )
 
-        self.canvas.create_rectangle(
-            89.0,
-            88.0,
-            178.0,
-            147.0,
-            fill="#073131",
-            outline="")
+        # self.canvas.create_rectangle(
+        #     89.0,
+        #     88.0,
+        #     178.0,
+        #     147.0,
+        #     fill="#073131",
+        #     outline="")
 
-        self.entry_image_4 = PhotoImage(
-            file=self.relative_to_assets("entry_4.png"))
-        self.entry_bg_4 = self.canvas.create_image(
-            209.0,
-            132.0,
-            image=self.entry_image_4
-        )
-        self.entry_4 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_4.place(
-            x=99.0,
-            y=117.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_4 = PhotoImage(
+        #     file=self.relative_to_assets("entry_4.png"))
+        # self.entry_bg_4 = self.canvas.create_image(
+        #     209.0,
+        #     132.0,
+        #     image=self.entry_image_4
+        # )
+        # self.entry_4 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_4.place(
+        #     x=99.0,
+        #     y=117.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
 
-        self.canvas.create_text(
-            95.0,
-            87.0,
-            anchor="nw",
-            text="ID Cliente",
-            fill="#FFFFFF",
-            font=("WorkSansRoman Regular", 16 * -1)
-        )
+        # self.canvas.create_text(
+        #     95.0,
+        #     87.0,
+        #     anchor="nw",
+        #     text="ID Cliente",
+        #     fill="#FFFFFF",
+        #     font=("WorkSansRoman Regular", 16 * -1)
+        # )
 
-        self.canvas.create_rectangle(
-            400.0,
-            268.0,
-            441.0,
-            327.0,
-            fill="#073131",
-            outline="")
+        # self.canvas.create_rectangle(
+        #     400.0,
+        #     268.0,
+        #     441.0,
+        #     327.0,
+        #     fill="#073131",
+        #     outline="")
 
-        self.entry_image_5 = PhotoImage(
-            file=self.relative_to_assets("entry_5.png"))
-        self.entry_bg_5 = self.canvas.create_image(
-            520.0,
-            312.0,
-            image=self.entry_image_5
-        )
-        self.entry_5 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_5.place(
-            x=410.0,
-            y=297.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_5 = PhotoImage(
+        #     file=self.relative_to_assets("entry_5.png"))
+        # self.entry_bg_5 = self.canvas.create_image(
+        #     520.0,
+        #     312.0,
+        #     image=self.entry_image_5
+        # )
+        # self.entry_5 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_5.place(
+        #     x=410.0,
+        #     y=297.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
 
         self.canvas.create_text(
             403.0,
@@ -421,25 +415,25 @@ class RegistrarAtencionAgente:
             fill="#073131",
             outline="")
 
-        self.entry_image_7 = PhotoImage(
-            file=self.relative_to_assets("entry_7.png"))
-        self.entry_bg_7 = self.canvas.create_image(
-            209.0,
-            312.0,
-            image=self.entry_image_7
-        )
-        self.entry_7 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        self.entry_7.place(
-            x=99.0,
-            y=297.0,
-            width=220.0,
-            height=28.0
-        )
+        # self.entry_image_7 = PhotoImage(
+        #     file=self.relative_to_assets("entry_7.png"))
+        # self.entry_bg_7 = self.canvas.create_image(
+        #     209.0,
+        #     312.0,
+        #     image=self.entry_image_7
+        # )
+        # self.entry_7 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0
+        # )
+        # self.entry_7.place(
+        #     x=99.0,
+        #     y=297.0,
+        #     width=220.0,
+        #     height=28.0
+        # )
 
         self.canvas.create_text(
             92.0,
