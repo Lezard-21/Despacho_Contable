@@ -136,7 +136,7 @@ class RegistrarAtenciones:
         )
 
         self.master.geometry("782x587")
-        self.master.configure(bg="#FFFFFF")
+        self.master.configure(bg="#000")
         self.master.resizable(False,False)
 
     def relative_to_assets(self, path: str) -> Path:
